@@ -1,0 +1,13 @@
+package br.com.postech.ubsfacil;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class UbsfacilApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(UbsfacilApplication.class, args);
+	}
+
+}
