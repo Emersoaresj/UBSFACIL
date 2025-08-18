@@ -12,7 +12,7 @@
 	<artifactId>ubsfacil</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ubsfacil</name>
-	<description>Sistema para gestão de insumos e fila virtual em Unidades Básicas de Saúde.</description>
+	<description>Sistema para gestão de insumos em Unidades Básicas de Saúde.</description>
 	<url/>
 	<licenses>
 		<license/>
