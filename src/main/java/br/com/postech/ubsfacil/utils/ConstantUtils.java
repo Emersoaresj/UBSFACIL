@@ -12,7 +12,8 @@ public class ConstantUtils {
     }
 
     //ERROS
-    public static final String UBS_NAO_ENCONTRADA = "UBS não encontrada com o CNES informado.";
+    public static final String UBS_NAO_ENCONTRADA = "UBS não encontrada com as informações fornecidas.";
+    public static final String ERRO_UF = "A UF deve conter exatamente 2 letras maiúsculas.";
 
     //SUCESSO
     public static final String UBS_CADASTRADA = "UBS cadastrada com sucesso!";

@@ -15,12 +15,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class UbsServiceImpl implements UbsServicePort {
 
     @Autowired
     private UbsRepositoryPort ubsRepositoryPort;
+
 
 
     @Override
@@ -53,6 +56,51 @@ public class UbsServiceImpl implements UbsServicePort {
             Ubs ubs = ubsRepositoryPort.findByCnes(cnes)
                     .orElseThrow(() -> new UbsNotFoundException(ConstantUtils.UBS_NAO_ENCONTRADA));
             return UbsMapper.INSTANCE.domainToDto(ubs);
+
+        } catch (UbsNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao buscar UBS", e);
+            throw new ErroInternoException("Erro interno ao tentar buscar UBS: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<UbsResponseDto> buscarPorCidadeUf(String cidade, String uf) {
+
+        if ((cidade == null || cidade.isBlank()) && (uf == null || uf.isBlank())) {
+            throw new ErroNegocioException("É necessário informar pelo menos cidade ou UF.");
+        }
+
+        List<Ubs> ubsList;
+
+        try {
+            if (cidade != null && !cidade.isBlank() && uf != null && !uf.isBlank()) {
+                // validação da UF (2 letras maiúsculas)
+                if (!uf.matches("^[A-Z]{2}$")) {
+                    throw new ErroNegocioException(ConstantUtils.ERRO_UF);
+                }
+
+                // Busca por cidade e UF
+                ubsList = ubsRepositoryPort.findAllByCidadeAndUf(cidade, uf);
+
+            } else if (cidade != null && !cidade.isBlank()) {
+                ubsList = ubsRepositoryPort.findAllByCidade(cidade);
+
+            } else {
+                if (!uf.matches("^[A-Z]{2}$")) {
+                    throw new ErroNegocioException(ConstantUtils.ERRO_UF);
+                }
+                ubsList = ubsRepositoryPort.findAllByUf(uf);
+            }
+
+            if (ubsList.isEmpty()) {
+                throw new UbsNotFoundException(ConstantUtils.UBS_NAO_ENCONTRADA);
+            }
+
+            return ubsList.stream()
+                    .map(UbsMapper.INSTANCE::domainToDto)
+                    .toList();
 
         } catch (UbsNotFoundException e) {
             throw e;

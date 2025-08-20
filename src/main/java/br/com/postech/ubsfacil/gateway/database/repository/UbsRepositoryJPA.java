@@ -4,10 +4,17 @@ import br.com.postech.ubsfacil.gateway.database.entity.UbsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UbsRepositoryJPA extends JpaRepository<UbsEntity, Integer> {
 
     Optional<UbsEntity> findByCnes(String cnes);
+
+    List<UbsEntity> findAllByCidadeAndUf(String cidade, String uf);
+
+    List<UbsEntity> findAllByCidade(String cidade);
+
+    List<UbsEntity> findAllByUf(String uf);
 }

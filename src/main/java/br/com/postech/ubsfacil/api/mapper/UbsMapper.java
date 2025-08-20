@@ -8,6 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface UbsMapper {
 
@@ -19,6 +21,8 @@ public interface UbsMapper {
     Ubs requestCreateToDomain(UbsRequestDto ubsRequestDto);
 
     Ubs entityToDomain (UbsEntity ubsEntity);
+
+    List<Ubs> listEntityToDomain (List<UbsEntity> ubsEntities);
 
     UbsResponseDto domainToDto(Ubs ubs);
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -43,6 +44,39 @@ public class UbsRepositoryImpl implements UbsRepositoryPort {
         } catch (Exception e) {
             log.error("Erro ao buscar CNES", e);
             throw new ErroInternoException("Erro ao buscar CNES: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Ubs> findAllByCidadeAndUf(String cidade, String uf) {
+        try {
+            List<UbsEntity> entities = ubsRepositoryJPA.findAllByCidadeAndUf(cidade, uf);
+            return UbsMapper.INSTANCE.listEntityToDomain(entities);
+        } catch (Exception e) {
+            log.error("Erro ao buscar UBS por cidade e UF", e);
+            throw new ErroInternoException("Erro ao buscar UBS por cidade e UF: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Ubs> findAllByCidade(String cidade) {
+        try {
+            List<UbsEntity> entities = ubsRepositoryJPA.findAllByCidade(cidade);
+            return UbsMapper.INSTANCE.listEntityToDomain(entities);
+        } catch (Exception e) {
+            log.error("Erro ao buscar UBS por cidade", e);
+            throw new ErroInternoException("Erro ao buscar UBS por cidade: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Ubs> findAllByUf(String uf) {
+        try {
+            List<UbsEntity> entities = ubsRepositoryJPA.findAllByUf(uf);
+            return UbsMapper.INSTANCE.listEntityToDomain(entities);
+        } catch (Exception e) {
+            log.error("Erro ao buscar UBS por UF", e);
+            throw new ErroInternoException("Erro ao buscar UBS por UF: " + e.getMessage());
         }
     }
 
