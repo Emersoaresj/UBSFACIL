@@ -1,6 +1,6 @@
 package br.com.postech.ubsfacil.domain.exceptions;
 
-import jakarta.servlet.http.HttpServletRequest;
+import br.com.postech.ubsfacil.domain.exceptions.ubs.UbsNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,7 +41,7 @@ public class GlobalHandlerException {
         Map<String, Object> response = new HashMap<>();
         response.put(TIMESTAMP, LocalDateTime.now());
         response.put(STATUS, HttpStatus.BAD_REQUEST.value());
-        response.put(ERROR, "Erro de regra de negócio.");
+        response.put(ERROR, "Erro de request.");
         response.put(MENSAGEM, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
@@ -59,6 +59,15 @@ public class GlobalHandlerException {
         response.put("errors", fieldErrors);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UbsNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handlerUbsNotFoundException(UbsNotFoundException ubsNotFoundException) {
+        Map<String, Object> response = new HashMap<>();
+        response.put(TIMESTAMP, LocalDateTime.now());
+        response.put(MENSAGEM, ubsNotFoundException.getMessage());
+        response.put(STATUS, HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
 

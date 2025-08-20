@@ -1,4 +1,4 @@
-package br.com.postech.ubsfacil.api.dto;
+package br.com.postech.ubsfacil.api.dto.ubs;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
