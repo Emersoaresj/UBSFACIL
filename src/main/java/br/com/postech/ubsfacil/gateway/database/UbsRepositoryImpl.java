@@ -80,6 +80,18 @@ public class UbsRepositoryImpl implements UbsRepositoryPort {
         }
     }
 
+    @Override
+    public ResponseDto atualizarUbs(Ubs ubs) {
+        try {
+            UbsEntity ubsEntity = UbsMapper.INSTANCE.updateDomainToEntity(ubs);
+            ubsRepositoryJPA.save(ubsEntity);
+            return montaResponse(ubsEntity, "update");
+        } catch (Exception e) {
+            log.error("Erro ao atualizar ubs", e);
+            throw new ErroInternoException("Erro ao atualizar ubs: " + e.getMessage());
+        }
+    }
+
 
     private ResponseDto montaResponse(UbsEntity ubsEntity, String acao) {
         ResponseDto response = new ResponseDto();

@@ -3,6 +3,7 @@ package br.com.postech.ubsfacil.api.controller;
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsRequestDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsResponseDto;
+import br.com.postech.ubsfacil.api.dto.ubs.UbsUpdateDto;
 import br.com.postech.ubsfacil.gateway.ports.UbsServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -50,6 +51,18 @@ public class UbsController {
             @Parameter(description = "UF da UBS (2 letras maiúsculas)", example = "SP")
             @RequestParam(value = "uf", required = false) String uf) {
         List<UbsResponseDto> response = service.buscarPorCidadeUf(cidade, uf);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PutMapping("/atualizacao/{cnes}")
+    @Operation(summary = "Atualizar dados de uma UBS",
+            description = "Endpoint para atualizar os dados de uma Unidade Básica de Saúde pelo CNES")
+    public ResponseEntity<ResponseDto> atualizarUbs(
+            @Parameter(description = "CNES da UBS (apenas números)", example = "1234567")
+            @PathVariable("cnes") String cnes,
+            @Valid @RequestBody UbsUpdateDto ubsRequestDto) {
+
+        ResponseDto response = service.atualizarUbs(cnes, ubsRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

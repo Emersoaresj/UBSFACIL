@@ -17,4 +17,6 @@ public interface UbsRepositoryPort {
     List<Ubs> findAllByCidade(String cidade);
 
     List<Ubs> findAllByUf(String uf);
+
+    ResponseDto atualizarUbs(Ubs ubs);
 }

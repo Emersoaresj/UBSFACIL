@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Ubs {
+    private Integer idUbs;
     private String nome;
     private String cnes;  // Cadastro Nacional de Estabelecimentos de Saúde
     private String telefone;

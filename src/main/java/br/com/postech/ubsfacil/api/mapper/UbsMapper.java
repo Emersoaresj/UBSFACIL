@@ -18,6 +18,7 @@ public interface UbsMapper {
     @Mapping(target = "idUbs", ignore = true)
     UbsEntity domainToEntity(Ubs ubs);
 
+    @Mapping(target = "idUbs", ignore = true)
     Ubs requestCreateToDomain(UbsRequestDto ubsRequestDto);
 
     Ubs entityToDomain (UbsEntity ubsEntity);
@@ -25,4 +26,6 @@ public interface UbsMapper {
     List<Ubs> listEntityToDomain (List<UbsEntity> ubsEntities);
 
     UbsResponseDto domainToDto(Ubs ubs);
+
+    UbsEntity updateDomainToEntity(Ubs ubs);
 }

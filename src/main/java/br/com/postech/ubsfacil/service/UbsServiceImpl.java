@@ -1,6 +1,7 @@
 package br.com.postech.ubsfacil.service;
 
 import br.com.postech.ubsfacil.api.dto.ubs.UbsResponseDto;
+import br.com.postech.ubsfacil.api.dto.ubs.UbsUpdateDto;
 import br.com.postech.ubsfacil.api.mapper.UbsMapper;
 import br.com.postech.ubsfacil.domain.Ubs;
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
@@ -107,6 +108,54 @@ public class UbsServiceImpl implements UbsServicePort {
         } catch (Exception e) {
             log.error("Erro inesperado ao buscar UBS", e);
             throw new ErroInternoException("Erro interno ao tentar buscar UBS: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseDto atualizarUbs(String cnes, UbsUpdateDto ubsRequestDto) {
+        if (!cnes.matches("\\d+")) {
+            throw new ErroNegocioException("O CNES deve conter apenas números.");
+        }
+
+        try {
+            Ubs ubs = ubsRepositoryPort.findByCnes(cnes)
+                    .orElseThrow(() -> new UbsNotFoundException(ConstantUtils.UBS_NAO_ENCONTRADA));
+
+            validaAtualizacao(ubs, ubsRequestDto);
+
+            return ubsRepositoryPort.atualizarUbs(ubs);
+        } catch (UbsNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao atualizar cliente", e);
+            throw new ErroInternoException("Erro interno ao tentar atualizar cliente: " + e.getMessage());
+        }
+    }
+
+    private void validaAtualizacao(Ubs ubs, UbsUpdateDto request) {
+        if (request.getNome() != null) {
+            ubs.setNome(request.getNome());
+        }
+        if (request.getTelefone() != null) {
+            ubs.setTelefone(request.getTelefone());
+        }
+        if (request.getLogradouro() != null) {
+            ubs.setLogradouro(request.getLogradouro());
+        }
+        if (request.getNumero() != null) {
+            ubs.setNumero(request.getNumero());
+        }
+        if (request.getCep() != null) {
+            ubs.setCep(request.getCep());
+        }
+        if (request.getBairro() != null) {
+            ubs.setBairro(request.getBairro());
+        }
+        if (request.getCidade() != null) {
+            ubs.setCidade(request.getCidade());
+        }
+        if (request.getUf() != null) {
+            ubs.setUf(request.getUf());
         }
     }
 }
