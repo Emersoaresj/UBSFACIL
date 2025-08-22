@@ -8,6 +8,7 @@ import br.com.postech.ubsfacil.gateway.database.entity.UbsEntity;
 import br.com.postech.ubsfacil.gateway.database.repository.UbsRepositoryJPA;
 import br.com.postech.ubsfacil.gateway.ports.UbsRepositoryPort;
 import br.com.postech.ubsfacil.utils.ConstantUtils;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,6 +25,7 @@ public class UbsRepositoryImpl implements UbsRepositoryPort {
     @Autowired
     private UbsRepositoryJPA ubsRepositoryJPA;
 
+    @Transactional
     @Override
     public ResponseDto cadastraUbs(Ubs ubs) {
         try {
@@ -80,6 +82,7 @@ public class UbsRepositoryImpl implements UbsRepositoryPort {
         }
     }
 
+    @Transactional
     @Override
     public ResponseDto atualizarUbs(Ubs ubs) {
         try {
@@ -89,6 +92,17 @@ public class UbsRepositoryImpl implements UbsRepositoryPort {
         } catch (Exception e) {
             log.error("Erro ao atualizar ubs", e);
             throw new ErroInternoException("Erro ao atualizar ubs: " + e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Override
+    public void deletarUbs(String cnes) {
+        try {
+            ubsRepositoryJPA.deleteByCnes(cnes);
+        } catch (Exception e) {
+            log.error("Erro ao deletar UBS", e);
+            throw new ErroInternoException("Erro ao deletar UBS: " + e.getMessage());
         }
     }
 

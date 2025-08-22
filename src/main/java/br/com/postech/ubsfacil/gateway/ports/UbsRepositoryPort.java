@@ -19,4 +19,6 @@ public interface UbsRepositoryPort {
     List<Ubs> findAllByUf(String uf);
 
     ResponseDto atualizarUbs(Ubs ubs);
+
+    void deletarUbs(String cnes);
 }

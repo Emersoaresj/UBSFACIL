@@ -17,4 +17,6 @@ public interface UbsRepositoryJPA extends JpaRepository<UbsEntity, Integer> {
     List<UbsEntity> findAllByCidade(String cidade);
 
     List<UbsEntity> findAllByUf(String uf);
+
+    void deleteByCnes(String cnes);
 }

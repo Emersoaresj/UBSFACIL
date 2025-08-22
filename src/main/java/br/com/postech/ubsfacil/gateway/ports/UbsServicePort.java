@@ -16,4 +16,6 @@ public interface UbsServicePort {
     List<UbsResponseDto> buscarPorCidadeUf(String cidade, String uf);
 
     ResponseDto atualizarUbs(String cnes, UbsUpdateDto ubsRequestDto);
+
+    void deletarUbs(String cnes);
 }

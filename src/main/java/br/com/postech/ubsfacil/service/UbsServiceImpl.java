@@ -127,8 +127,28 @@ public class UbsServiceImpl implements UbsServicePort {
         } catch (UbsNotFoundException e) {
             throw e;
         } catch (Exception e) {
-            log.error("Erro inesperado ao atualizar cliente", e);
-            throw new ErroInternoException("Erro interno ao tentar atualizar cliente: " + e.getMessage());
+            log.error("Erro inesperado ao atualizar UBS", e);
+            throw new ErroInternoException("Erro interno ao tentar atualizar UBS: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deletarUbs(String cnes) {
+        if (!cnes.matches("\\d+")) {
+            throw new ErroNegocioException("O CNES deve conter apenas números.");
+        }
+
+
+        try {
+            Ubs ubs = ubsRepositoryPort.findByCnes(cnes)
+                    .orElseThrow(() -> new UbsNotFoundException(ConstantUtils.UBS_NAO_ENCONTRADA));
+
+            ubsRepositoryPort.deletarUbs(ubs.getCnes());
+        } catch (UbsNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao deletar UBS", e);
+            throw new ErroInternoException("Erro interno ao tentar deletar UBS: " + e.getMessage());
         }
     }
 

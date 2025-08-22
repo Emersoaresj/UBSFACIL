@@ -65,4 +65,14 @@ public class UbsController {
         ResponseDto response = service.atualizarUbs(cnes, ubsRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @DeleteMapping("/delete/{cnes}")
+    @Operation(summary = "Deletar uma UBS",
+            description = "Endpoint para deletar uma Unidade Básica de Saúde pelo CNES")
+    public ResponseEntity<Void> deletarUbs(
+            @Parameter(description = "CNES da UBS (apenas números)", example = "1234567")
+            @PathVariable("cnes") String cnes) {
+        service.deletarUbs(cnes);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
