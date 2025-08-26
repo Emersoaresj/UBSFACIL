@@ -6,7 +6,7 @@ import br.com.postech.ubsfacil.domain.Ubs;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.gateway.database.entity.UbsEntity;
 import br.com.postech.ubsfacil.gateway.database.repository.UbsRepositoryJPA;
-import br.com.postech.ubsfacil.gateway.ports.UbsRepositoryPort;
+import br.com.postech.ubsfacil.gateway.ports.ubs.UbsRepositoryPort;
 import br.com.postech.ubsfacil.utils.ConstantUtils;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;

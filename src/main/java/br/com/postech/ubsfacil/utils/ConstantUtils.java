@@ -5,8 +5,6 @@ import lombok.Data;
 @Data
 public class ConstantUtils {
 
-
-
     private ConstantUtils() {
         throw new IllegalStateException("Classe Utilitária");
     }
@@ -18,4 +16,6 @@ public class ConstantUtils {
     //SUCESSO
     public static final String UBS_CADASTRADA = "UBS cadastrada com sucesso!";
     public static final String UBS_ATUALIZADA = "UBS atualizada com sucesso!";
+    public static final String INSUMO_CADASTRADO = "Insumo cadastrado com sucesso!";
+    public static final String INSUMO_ATUALIZADO = "Insumo atualizado com sucesso!";
 }

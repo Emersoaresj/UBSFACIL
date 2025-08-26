@@ -4,7 +4,7 @@ import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsRequestDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsResponseDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsUpdateDto;
-import br.com.postech.ubsfacil.gateway.ports.UbsServicePort;
+import br.com.postech.ubsfacil.gateway.ports.ubs.UbsServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
