@@ -1,6 +1,7 @@
 package br.com.postech.ubsfacil.api.mapper;
 
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoRequestDto;
+import br.com.postech.ubsfacil.api.dto.insumos.InsumoResponseDto;
 import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.gateway.database.entity.InsumoEntity;
 import org.mapstruct.Mapper;
@@ -19,4 +20,6 @@ public interface InsumoMapper {
     InsumoEntity domainToEntity(Insumo insumo);
 
     Insumo entityToDomain(InsumoEntity insumoEntity);
+
+    InsumoResponseDto domainToResponse(Insumo insumo);
 }

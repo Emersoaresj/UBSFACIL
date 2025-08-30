@@ -1,6 +1,7 @@
 package br.com.postech.ubsfacil.domain.exceptions;
 
 import br.com.postech.ubsfacil.api.dto.insumos.TipoInsumo;
+import br.com.postech.ubsfacil.domain.exceptions.insumos.InsumoNotFoundException;
 import br.com.postech.ubsfacil.domain.exceptions.ubs.UbsNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -84,6 +85,15 @@ public class GlobalHandlerException {
         response.put("path", request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(InsumoNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handlerInsumoNotFoundException(InsumoNotFoundException insumoNotFoundException) {
+        Map<String, Object> response = new HashMap<>();
+        response.put(TIMESTAMP, LocalDateTime.now());
+        response.put(MENSAGEM, insumoNotFoundException.getMessage());
+        response.put(STATUS, HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
 }

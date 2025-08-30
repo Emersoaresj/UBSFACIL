@@ -4,6 +4,7 @@ import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
+import br.com.postech.ubsfacil.domain.exceptions.insumos.InsumoNotFoundException;
 import br.com.postech.ubsfacil.gateway.ports.InsumoRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.InsumoServicePort;
 import br.com.postech.ubsfacil.utils.ConstantUtils;
@@ -45,6 +46,19 @@ public class InsumoServiceImpl implements InsumoServicePort {
         } catch (Exception e) {
             log.error("Erro inesperado ao cadastrar Insumo", e);
             throw new ErroInternoException("Erro interno ao tentar cadastrar Insumo: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Insumo buscarInsumoPorSku(String sku) {
+        try {
+            return repositoryPort.findBySku(sku)
+                    .orElseThrow(() -> new InsumoNotFoundException("Insumo com SKU " + sku + " não localizado."));
+        } catch (InsumoNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao buscar Insumo", e);
+            throw new ErroInternoException("Erro interno ao tentar buscar Insumo: " + e.getMessage());
         }
     }
 

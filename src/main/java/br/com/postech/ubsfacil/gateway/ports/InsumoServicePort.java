@@ -6,4 +6,6 @@ import br.com.postech.ubsfacil.domain.Insumo;
 public interface InsumoServicePort {
 
     ResponseDto cadastrarInsumo(Insumo insumo);
+
+    Insumo buscarInsumoPorSku(String sku);
 }

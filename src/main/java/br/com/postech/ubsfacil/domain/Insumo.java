@@ -13,8 +13,8 @@ public class Insumo {
     private Integer idInsumo;
     private String sku;
     private String nome;
-    private TipoInsumo tipo; // Medicamento, material hospitalar, etc.
-    private boolean validadeControlada; // define se o insumo precisa de controle de vencimento (true/false)
+    private TipoInsumo tipo;
+    private boolean validadeControlada;
 
 
     public void validarCamposObrigatorios() {
