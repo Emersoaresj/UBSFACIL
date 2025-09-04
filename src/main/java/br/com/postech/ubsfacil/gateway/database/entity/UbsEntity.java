@@ -10,7 +10,7 @@ public class UbsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idUbs")
+    @Column(name = "id_ubs")
     private Integer idUbs;
 
     @Column(name = "nome")

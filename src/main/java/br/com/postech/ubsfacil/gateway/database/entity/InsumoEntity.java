@@ -10,7 +10,7 @@ public class InsumoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idInsumo")
+    @Column(name = "id_insumo")
     private Integer idInsumo;
 
     @Column(name = "nome")
@@ -22,6 +22,6 @@ public class InsumoEntity {
     @Column(name = "tipo")
     private String tipo; // Medicamento, material hospitalar, etc.
 
-    @Column(name = "validadeControlada")
+    @Column(name = "validade_controlada")
     private boolean validadeControlada;
 }

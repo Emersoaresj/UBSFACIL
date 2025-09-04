@@ -19,4 +19,6 @@ public class ConstantUtils {
     public static final String UBS_ATUALIZADA = "UBS atualizada com sucesso!";
     public static final String INSUMO_CADASTRADO = "Insumo cadastrado com sucesso!";
     public static final String INSUMO_ATUALIZADO = "Insumo atualizado com sucesso!";
+    public static final String ESTOQUE_CADASTRADO = "Estoque cadastrado com sucesso!";
+    public static final String ESTOQUE_ATUALIZADO = "Estoque atualizado com sucesso!";
 }

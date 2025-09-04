@@ -1,4 +1,4 @@
-package br.com.postech.ubsfacil.gateway.ports;
+package br.com.postech.ubsfacil.gateway.ports.insumo;
 
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.domain.Insumo;

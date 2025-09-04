@@ -5,7 +5,7 @@ import br.com.postech.ubsfacil.api.dto.insumos.InsumoRequestDto;
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoResponseDto;
 import br.com.postech.ubsfacil.api.mapper.InsumoMapper;
 import br.com.postech.ubsfacil.domain.Insumo;
-import br.com.postech.ubsfacil.gateway.ports.InsumoServicePort;
+import br.com.postech.ubsfacil.gateway.ports.insumo.InsumoServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

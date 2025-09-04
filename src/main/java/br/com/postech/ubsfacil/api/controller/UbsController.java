@@ -23,8 +23,11 @@ import java.util.List;
 @Tag(name = "Unidade Básica de Saúde", description = "Gerenciamento de UBS")
 public class UbsController {
 
-    @Autowired
-    private UbsServicePort service;
+    private final UbsServicePort service;
+
+    public UbsController(UbsServicePort service) {
+        this.service = service;
+    }
 
     @Operation(summary = "Cadastrar uma nova UBS",
             description = "Endpoint para cadastrar uma nova Unidade Básica de Saúde")

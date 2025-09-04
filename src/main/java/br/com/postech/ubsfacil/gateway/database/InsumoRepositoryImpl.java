@@ -5,7 +5,7 @@ import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.gateway.database.entity.InsumoEntity;
 import br.com.postech.ubsfacil.gateway.database.repository.InsumoRepositoryJPA;
-import br.com.postech.ubsfacil.gateway.ports.InsumoRepositoryPort;
+import br.com.postech.ubsfacil.gateway.ports.insumo.InsumoRepositoryPort;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
