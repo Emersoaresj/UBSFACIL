@@ -6,4 +6,6 @@ import br.com.postech.ubsfacil.domain.Estoque;
 public interface EstoqueServicePort {
 
     ResponseDto cadastrarEstoque(Estoque estoque);
+
+    Estoque buscarEstoquePorId(Integer idEstoque);
 }

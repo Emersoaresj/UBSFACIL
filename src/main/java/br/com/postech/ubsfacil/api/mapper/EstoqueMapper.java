@@ -1,6 +1,7 @@
 package br.com.postech.ubsfacil.api.mapper;
 
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueRequestDto;
+import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;
 import br.com.postech.ubsfacil.domain.Estoque;
 import br.com.postech.ubsfacil.gateway.database.entity.EstoqueEntity;
 import org.mapstruct.Mapper;
@@ -18,4 +19,6 @@ public interface EstoqueMapper {
     Estoque entityToDomain(EstoqueEntity entity);
 
     EstoqueEntity domainToEntity(Estoque estoque);
+
+    EstoqueResponseDto domainToResponse(Estoque estoque);
 }

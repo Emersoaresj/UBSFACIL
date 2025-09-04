@@ -34,6 +34,17 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
     }
 
     @Override
+    public Optional<Estoque> findByIdEstoque(Integer id) {
+        try {
+            return estoqueRepositoryJPA.findById(id)
+                    .map(EstoqueMapper.INSTANCE::entityToDomain);
+        } catch (Exception e) {
+            log.error("Erro ao buscar Estoque por ID", e);
+            throw new ErroInternoException("Erro ao buscar Estoque por ID: " + e.getMessage());
+        }
+    }
+
+    @Override
     public Optional<Estoque> findByInsumoSku(String insumoSku) {
         try {
             return estoqueRepositoryJPA.findByInsumoSku(insumoSku)

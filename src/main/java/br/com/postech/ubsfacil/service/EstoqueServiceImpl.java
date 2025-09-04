@@ -4,6 +4,7 @@ import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.domain.Estoque;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
+import br.com.postech.ubsfacil.domain.exceptions.estoque.EstoqueNotFoundException;
 import br.com.postech.ubsfacil.gateway.ports.EstoqueRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.EstoqueServicePort;
 import br.com.postech.ubsfacil.gateway.ports.ubs.UbsRepositoryPort;
@@ -61,6 +62,18 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
         }
     }
 
+    @Override
+    public Estoque buscarEstoquePorId(Integer idEstoque) {
+        try {
+            return estoqueRepositoryPort.findByIdEstoque(idEstoque)
+                    .orElseThrow(() -> new EstoqueNotFoundException("Estoque com ID " + idEstoque + " não localizado."));
+        } catch (EstoqueNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao buscar Estoque", e);
+            throw new ErroInternoException("Erro interno ao tentar buscar Estoque: " + e.getMessage());
+        }
+    }
 
 
     private ResponseDto montaResponse(Estoque estoque, String acao) {

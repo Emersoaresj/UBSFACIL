@@ -9,4 +9,6 @@ public interface EstoqueRepositoryPort {
     Optional<Estoque> findByInsumoSku(String insumoSku);
 
     Estoque cadastrarEstoque(Estoque estoque);
+
+    Optional<Estoque> findByIdEstoque(Integer id);
 }

@@ -1,6 +1,7 @@
 package br.com.postech.ubsfacil.domain.exceptions;
 
 import br.com.postech.ubsfacil.api.dto.insumos.TipoInsumo;
+import br.com.postech.ubsfacil.domain.exceptions.estoque.EstoqueNotFoundException;
 import br.com.postech.ubsfacil.domain.exceptions.insumos.InsumoNotFoundException;
 import br.com.postech.ubsfacil.domain.exceptions.ubs.UbsNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -92,6 +93,15 @@ public class GlobalHandlerException {
         Map<String, Object> response = new HashMap<>();
         response.put(TIMESTAMP, LocalDateTime.now());
         response.put(MENSAGEM, insumoNotFoundException.getMessage());
+        response.put(STATUS, HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EstoqueNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handlerEstoqueNotFoundException(EstoqueNotFoundException estoqueNotFoundException) {
+        Map<String, Object> response = new HashMap<>();
+        response.put(TIMESTAMP, LocalDateTime.now());
+        response.put(MENSAGEM, estoqueNotFoundException.getMessage());
         response.put(STATUS, HttpStatus.NOT_FOUND.value());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
