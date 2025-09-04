@@ -16,4 +16,6 @@ public interface InsumoRepositoryPort {
     List<Insumo> buscarTodos();
 
     Insumo atualizarInsumo(Insumo insumo);
+
+    void deletarInsumo(String sku);
 }

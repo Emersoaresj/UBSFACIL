@@ -16,4 +16,6 @@ public interface InsumoServicePort {
     List<Insumo> buscarTodos();
 
     Insumo atualizarInsumo(Insumo insumo);
+
+    void deletarInsumo(String sku);
 }

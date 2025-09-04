@@ -106,6 +106,23 @@ public class InsumoServiceImpl implements InsumoServicePort {
         }
     }
 
+    @Override
+    public void deletarInsumo(String sku) {
+        try {
+            repositoryPort.findBySku(sku)
+                    .orElseThrow(() -> new InsumoNotFoundException(ConstantUtils.INSUMO_NAO_ENCONTRADO));
+
+            repositoryPort.deletarInsumo(sku);
+
+        } catch (InsumoNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao excluir insumo", e);
+            throw new ErroInternoException("Erro interno ao tentar excluir insumo: " + e.getMessage());
+        }
+    }
+
+
     private ResponseDto montaResponse(Insumo insumo, String acao) {
         ResponseDto response = new ResponseDto();
 

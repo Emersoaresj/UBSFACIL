@@ -6,6 +6,7 @@ import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.gateway.database.entity.InsumoEntity;
 import br.com.postech.ubsfacil.gateway.database.repository.InsumoRepositoryJPA;
 import br.com.postech.ubsfacil.gateway.ports.InsumoRepositoryPort;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +23,7 @@ public class InsumoRepositoryImpl implements InsumoRepositoryPort {
         this.insumoRepositoryJPA = insumoRepositoryJPA;
     }
 
-
+    @Transactional
     @Override
     public Insumo cadastrarInsumo(Insumo insumo) {
         try {
@@ -68,6 +69,7 @@ public class InsumoRepositoryImpl implements InsumoRepositoryPort {
         }
     }
 
+    @Transactional
     @Override
     public Insumo atualizarInsumo(Insumo insumo) {
         try {
@@ -77,6 +79,17 @@ public class InsumoRepositoryImpl implements InsumoRepositoryPort {
         } catch (Exception e) {
             log.error("Erro ao atualizar Insumo", e);
             throw new ErroInternoException("Erro ao atualizar Insumo: " + e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Override
+    public void deletarInsumo(String sku) {
+        try {
+            insumoRepositoryJPA.deleteBySku(sku);
+        } catch (Exception e) {
+            log.error("Erro ao excluir insumo", e);
+            throw new ErroInternoException("Erro ao excluir insumo: " + e.getMessage());
         }
     }
 

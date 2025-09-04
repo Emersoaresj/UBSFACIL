@@ -13,4 +13,6 @@ public interface InsumoRepositoryJPA extends JpaRepository<InsumoEntity, Integer
     Optional<InsumoEntity> findBySku(String sku);
 
     List<InsumoEntity> findByTipo(String tipo);
+
+    void deleteBySku(String sku);
 }

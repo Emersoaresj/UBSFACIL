@@ -81,5 +81,15 @@ public class InsumoController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
+    @DeleteMapping("/deletar/{sku}")
+    @Operation(summary = "Excluir insumo",
+            description = "Endpoint para excluir (inativar) um insumo pelo SKU.")
+    public ResponseEntity<Void> deletarInsumo(
+            @Parameter(description = "SKU do insumo", example = "DIP500")
+            @PathVariable("sku") String sku) {
+
+        servicePort.deletarInsumo(sku);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
 }

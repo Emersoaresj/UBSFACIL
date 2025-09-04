@@ -15,7 +15,7 @@ public interface InsumoMapper {
 
     InsumoMapper INSTANCE = Mappers.getMapper(InsumoMapper.class);
 
-
+    @Mapping(target = "idInsumo", ignore = true)
     Insumo requestToDomain (InsumoRequestDto insumoRequestDto);
 
     @Mapping(target = "idInsumo", ignore = true)

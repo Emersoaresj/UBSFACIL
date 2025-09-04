@@ -2,13 +2,7 @@ package br.com.postech.ubsfacil.domain;
 
 import br.com.postech.ubsfacil.api.dto.insumos.TipoInsumo;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 public class Insumo {
     private Integer idInsumo;
     private String sku;
@@ -16,6 +10,54 @@ public class Insumo {
     private TipoInsumo tipo;
     private boolean validadeControlada;
 
+
+    public Insumo(Integer idInsumo, String sku, String nome, TipoInsumo tipo, boolean validadeControlada) {
+        this.idInsumo = idInsumo;
+        this.sku = sku;
+        this.nome = nome;
+        this.tipo = tipo;
+        this.validadeControlada = validadeControlada;
+    }
+
+    public Integer getIdInsumo() {
+        return idInsumo;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public TipoInsumo getTipo() {
+        return tipo;
+    }
+
+    public boolean isValidadeControlada() {
+        return validadeControlada;
+    }
+
+    public void setIdInsumo(Integer idInsumo) {
+        this.idInsumo = idInsumo;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setTipo(TipoInsumo tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setValidadeControlada(boolean validadeControlada) {
+        this.validadeControlada = validadeControlada;
+    }
 
     public void validarCamposObrigatorios() {
         if (sku == null || sku.isBlank()) {
