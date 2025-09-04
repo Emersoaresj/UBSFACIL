@@ -3,6 +3,7 @@ package br.com.postech.ubsfacil.api.mapper;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueRequestDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueRequestUpdateDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;
+import br.com.postech.ubsfacil.api.dto.estoque.MovimentacaoRequestDto;
 import br.com.postech.ubsfacil.domain.Estoque;
 import br.com.postech.ubsfacil.gateway.database.entity.EstoqueEntity;
 import org.mapstruct.Mapper;
@@ -29,5 +30,11 @@ public interface EstoqueMapper {
 
     List<Estoque> listEntityToDomain(List<EstoqueEntity> entities);
 
+    @Mapping(target = "idEstoque", ignore = true)
+    @Mapping(target = "ubsCnes", ignore = true)
+    @Mapping(target = "insumoSku", ignore = true)
     Estoque requestUpdateToDomain(EstoqueRequestUpdateDto dto);
+
+    @Mapping(target = "idEstoque", ignore = true)
+    Estoque movimentacaoRequestToDomain(MovimentacaoRequestDto dto);
 }

@@ -48,10 +48,10 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
     }
 
     @Override
-    public List<Estoque> findByCnesAndSku(String cnes, String sku) {
+    public Optional<Estoque> findByCnesAndSku(String cnes, String sku) {
         try {
-            List<EstoqueEntity> entities = estoqueRepositoryJPA.findByUbsCnesAndInsumoSku(cnes, sku);
-            return EstoqueMapper.INSTANCE.listEntityToDomain(entities);
+            EstoqueEntity entities = estoqueRepositoryJPA.findByUbsCnesAndInsumoSku(cnes, sku);
+            return Optional.ofNullable(EstoqueMapper.INSTANCE.entityToDomain(entities));
         } catch (Exception e) {
             log.error("Erro ao buscar Estoques por CNES e SKU", e);
             throw new ErroInternoException("Erro ao buscar Estoques por CNES e SKU: " + e.getMessage());

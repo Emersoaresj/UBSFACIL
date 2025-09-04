@@ -1,21 +1,29 @@
 package br.com.postech.ubsfacil.service;
 
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
+import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;
+import br.com.postech.ubsfacil.api.dto.estoque.TipoMovimentacao;
+import br.com.postech.ubsfacil.api.mapper.EstoqueMapper;
 import br.com.postech.ubsfacil.domain.Estoque;
+import br.com.postech.ubsfacil.domain.Movimentacao;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
 import br.com.postech.ubsfacil.domain.exceptions.estoque.EstoqueNotFoundException;
+import br.com.postech.ubsfacil.gateway.ports.AlertaServicePort;
 import br.com.postech.ubsfacil.gateway.ports.EstoqueRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.EstoqueServicePort;
+import br.com.postech.ubsfacil.gateway.ports.MovimentacaoRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.ubs.UbsRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.insumo.InsumoRepositoryPort;
 import br.com.postech.ubsfacil.utils.ConstantUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,11 +33,15 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
     private final EstoqueRepositoryPort estoqueRepositoryPort;
     private final UbsRepositoryPort ubsRepositoryPort;
     private final InsumoRepositoryPort insumoRepositoryPort;
+    private final MovimentacaoRepositoryPort movimentacaoRepositoryPort;
+    private final AlertaServicePort alertaServicePort;
 
-    public EstoqueServiceImpl(EstoqueRepositoryPort estoqueRepositoryPort, UbsRepositoryPort ubsRepositoryPort, InsumoRepositoryPort insumoRepositoryPort) {
+    public EstoqueServiceImpl(EstoqueRepositoryPort estoqueRepositoryPort, UbsRepositoryPort ubsRepositoryPort, InsumoRepositoryPort insumoRepositoryPort, MovimentacaoRepositoryPort movimentacaoRepositoryPort, AlertaServicePort alertaServicePort) {
         this.estoqueRepositoryPort = estoqueRepositoryPort;
         this.ubsRepositoryPort = ubsRepositoryPort;
         this.insumoRepositoryPort = insumoRepositoryPort;
+        this.movimentacaoRepositoryPort = movimentacaoRepositoryPort;
+        this.alertaServicePort = alertaServicePort;
     }
 
 
@@ -82,7 +94,7 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
     }
 
     @Override
-    public List<Estoque> buscarPorFiltro(String cnes, String sku) {
+    public Optional<Estoque> buscarPorFiltro(String cnes, String sku) {
         try {
             Estoque.validarCnes(cnes);
             if (ubsRepositoryPort.findByCnes(cnes).isEmpty()){
@@ -151,6 +163,78 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
             throw new ErroInternoException("Erro interno ao tentar deletar Estoque: " + e.getMessage());
         }
     }
+
+    @Override
+    public EstoqueResponseDto registrarMovimentacao(Estoque estoque, String tipoMovimentacaoStr, String motivo) {
+        try {
+            estoque.validarCamposObrigatorios();
+            estoque.validarDataValidade();
+            Estoque.validarCnes(estoque.getUbsCnes());
+
+            Movimentacao.validarTipoMovimentacao(tipoMovimentacaoStr);
+
+            TipoMovimentacao tipoMovimentacao = TipoMovimentacao.valueOf(tipoMovimentacaoStr.toUpperCase());
+
+            // Validação de existência
+            if (ubsRepositoryPort.findByCnes(estoque.getUbsCnes()).isEmpty()) {
+                throw new ErroNegocioException("UBS com CNES " + estoque.getUbsCnes() + " não encontrada.");
+            }
+
+            if (insumoRepositoryPort.findBySku(estoque.getInsumoSku()).isEmpty()) {
+                throw new ErroNegocioException("Insumo com SKU " + estoque.getInsumoSku() + " não encontrado.");
+            }
+
+            Estoque estoqueAtual = estoqueRepositoryPort
+                    .findByCnesAndSku(estoque.getUbsCnes(), estoque.getInsumoSku())
+                    .orElse(null);
+
+            boolean isEntrada = tipoMovimentacao == TipoMovimentacao.ENTRADA;
+
+            if (estoqueAtual == null) {
+                if (!isEntrada) {
+                    throw new ErroNegocioException("Não é possível realizar saída. Estoque ainda não cadastrado.");
+                }
+                estoqueRepositoryPort.cadastrarEstoque(estoque);
+                estoqueAtual = estoque;
+            } else {
+                int novaQuantidade = isEntrada
+                        ? estoqueAtual.getQuantidade() + estoque.getQuantidade()
+                        : estoqueAtual.getQuantidade() - estoque.getQuantidade();
+
+                if (novaQuantidade < 0) {
+                    throw new ErroNegocioException("Estoque insuficiente para saída. Quantidade disponível: " + estoqueAtual.getQuantidade());
+                }
+
+                estoqueAtual.setQuantidade(novaQuantidade);
+                estoqueRepositoryPort.atualizarEstoque(estoqueAtual);
+            }
+
+            // Registrar movimentação
+            Movimentacao movimentacao = new Movimentacao(
+                    null,
+                    estoque.getUbsCnes(),
+                    estoque.getInsumoSku(),
+                    tipoMovimentacao,
+                    estoque.getQuantidade(),
+                    motivo != null ? motivo : "Movimentação automática",
+                    LocalDate.now()
+            );
+
+            movimentacaoRepositoryPort.salvarMovimentacao(movimentacao);
+
+            // Gerar alertas
+            alertaServicePort.verificarEAvisar(estoqueAtual);
+
+            return EstoqueMapper.INSTANCE.domainToResponse(estoqueAtual);
+
+        } catch (ErroNegocioException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao registrar movimentação de estoque", e);
+            throw new ErroInternoException("Erro ao registrar movimentação: " + e.getMessage());
+        }
+    }
+
 
 
     private ResponseDto montaResponse(Estoque estoque, String acao) {

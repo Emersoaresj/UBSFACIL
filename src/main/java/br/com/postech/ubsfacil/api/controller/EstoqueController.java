@@ -4,6 +4,7 @@ import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueRequestDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueRequestUpdateDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;
+import br.com.postech.ubsfacil.api.dto.estoque.MovimentacaoRequestDto;
 import br.com.postech.ubsfacil.api.mapper.EstoqueMapper;
 import br.com.postech.ubsfacil.domain.Estoque;
 import br.com.postech.ubsfacil.gateway.ports.EstoqueServicePort;
@@ -57,16 +58,20 @@ public class EstoqueController {
             @Parameter(description = "SKU do insumo", example = "INS12345")
             @RequestParam(value = "sku", required = false) String sku){
 
-        List<Estoque> response;
+        List<Estoque> responseList;
+        Estoque responseFiltro;
 
         if (cnes != null && sku != null) {
-            response = servicePort.buscarPorFiltro(cnes, sku);
-        } else {
-            response = servicePort.buscarTodos();
-        }
-        List<EstoqueResponseDto> dto = EstoqueMapper.INSTANCE.listDomainToResponse(response);
+            responseFiltro = servicePort.buscarPorFiltro(cnes, sku).orElse(null);
+            EstoqueResponseDto filtro = EstoqueMapper.INSTANCE.domainToResponse(responseFiltro);
+            return ResponseEntity.status(HttpStatus.OK).body(List.of(filtro));
 
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+        } else {
+            responseList = servicePort.buscarTodos();
+            List<EstoqueResponseDto> dto = EstoqueMapper.INSTANCE.listDomainToResponse(responseList);
+
+            return ResponseEntity.status(HttpStatus.OK).body(dto);
+        }
     }
 
     @PutMapping("/atualizar/{idEstoque}")
@@ -95,4 +100,17 @@ public class EstoqueController {
         servicePort.deletarEstoque(idEstoque);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @PostMapping("/movimentacoes")
+    @Operation(summary = "Registrar movimentação de estoque",
+            description = "Endpoint para registrar uma entrada ou saída de insumos em uma UBS.")
+    public ResponseEntity<EstoqueResponseDto> registrarMovimentacao(
+            @Valid @RequestBody MovimentacaoRequestDto requestDto) {
+
+        Estoque estoque = EstoqueMapper.INSTANCE.movimentacaoRequestToDomain(requestDto);
+        EstoqueResponseDto response = servicePort.registrarMovimentacao(estoque, requestDto.getTipoMovimentacao(), requestDto.getMotivo());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
 }

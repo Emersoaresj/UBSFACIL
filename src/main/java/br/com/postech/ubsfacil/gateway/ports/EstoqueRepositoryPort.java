@@ -13,7 +13,7 @@ public interface EstoqueRepositoryPort {
 
     Optional<Estoque> findByIdEstoque(Integer id);
 
-    List<Estoque> findByCnesAndSku(String cnes, String sku);
+    Optional<Estoque> findByCnesAndSku(String cnes, String sku);
 
     List<Estoque> findAll();
 
