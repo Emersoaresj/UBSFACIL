@@ -2,12 +2,10 @@ package br.com.postech.ubsfacil.api.controller;
 
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueRequestDto;
+import br.com.postech.ubsfacil.api.dto.estoque.EstoqueRequestUpdateDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;
-import br.com.postech.ubsfacil.api.dto.insumos.InsumoResponseDto;
 import br.com.postech.ubsfacil.api.mapper.EstoqueMapper;
-import br.com.postech.ubsfacil.api.mapper.InsumoMapper;
 import br.com.postech.ubsfacil.domain.Estoque;
-import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.gateway.ports.EstoqueServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -69,5 +67,21 @@ public class EstoqueController {
         List<EstoqueResponseDto> dto = EstoqueMapper.INSTANCE.listDomainToResponse(response);
 
         return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
+    @PutMapping("/atualizar/{idEstoque}")
+    @Operation(summary = "Atualizar Estoque",
+            description = "Endpoint para atualizar os dados de um estoque existente pelo ID.")
+    public ResponseEntity<ResponseDto> atualizarEstoque(
+            @Parameter(description = "ID do estoque a ser atualizado", example = "1", required = true)
+            @PathVariable ("idEstoque") Integer idEstoque,
+            @Parameter(description = "Dados do estoque a ser atualizado", required = true)
+            @Valid @RequestBody EstoqueRequestUpdateDto requestDto) {
+
+        Estoque estoque = EstoqueMapper.INSTANCE.requestUpdateToDomain(requestDto);
+
+        ResponseDto atualizado = servicePort.atualizarEstoque(idEstoque, estoque);
+
+        return ResponseEntity.status(HttpStatus.OK).body(atualizado);
     }
 }

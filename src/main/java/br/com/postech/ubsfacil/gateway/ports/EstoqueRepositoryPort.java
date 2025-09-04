@@ -16,4 +16,6 @@ public interface EstoqueRepositoryPort {
     List<Estoque> findByCnesAndSku(String cnes, String sku);
 
     List<Estoque> findAll();
+
+    Estoque atualizarEstoque(Estoque estoque);
 }

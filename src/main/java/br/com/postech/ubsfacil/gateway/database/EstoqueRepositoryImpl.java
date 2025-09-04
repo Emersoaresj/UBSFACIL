@@ -68,6 +68,18 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
     }
 
     @Override
+    public Estoque atualizarEstoque(Estoque estoque) {
+        try {
+            EstoqueEntity estoqueEntity = EstoqueMapper.INSTANCE.domainToEntity(estoque);
+            estoqueRepositoryJPA.save(estoqueEntity);
+            return EstoqueMapper.INSTANCE.entityToDomain(estoqueEntity);
+        } catch (Exception e) {
+            log.error("Erro ao atualizar Estoque", e);
+            throw new ErroInternoException("Erro ao atualizar Estoque: " + e.getMessage());
+        }
+    }
+
+    @Override
     public Optional<Estoque> findByInsumoSku(String insumoSku) {
         try {
             return estoqueRepositoryJPA.findByInsumoSku(insumoSku)

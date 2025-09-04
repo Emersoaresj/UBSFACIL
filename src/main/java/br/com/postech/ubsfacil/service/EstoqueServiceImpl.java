@@ -36,10 +36,14 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
     @Override
     public ResponseDto cadastrarEstoque(Estoque estoque) {
         try {
-            estoque.validarCnes(estoque.getUbsCnes());
+            Estoque.validarCnes(estoque.getUbsCnes());
             estoque.validarCamposObrigatorios();
             estoque.validarDataValidade();
 
+            if(estoque.isEstoqueBaixo()) {
+                log.warn("Estoque está abaixo do estoque mínimo");
+                throw new ErroNegocioException("A quantidade em estoque não pode ser menor que o estoque mínimo.");
+            }
             if (estoqueRepositoryPort.findByInsumoSku(estoque.getInsumoSku()).isPresent()) {
                 log.error("Estoque com SKU de Insumo {} já cadastrado", estoque.getInsumoSku());
                 throw new ErroNegocioException("Estoque com SKU " + estoque.getInsumoSku() + " já cadastrado.");
@@ -104,6 +108,32 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
         } catch (Exception e) {
             log.error("Erro inesperado ao buscar todos os Estoques", e);
             throw new ErroInternoException("Erro interno ao tentar buscar todos os Estoques: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseDto atualizarEstoque(Integer idEstoque, Estoque estoque) {
+        try {
+            estoque.validarDataValidade();
+            if(estoque.isEstoqueBaixo()) {
+                log.warn("Estoque com ID {} está abaixo do estoque mínimo", idEstoque);
+                throw new ErroNegocioException("A quantidade em estoque não pode ser menor que o estoque mínimo.");
+            }
+
+            Estoque existente = estoqueRepositoryPort.findByIdEstoque(idEstoque)
+                    .orElseThrow(() -> new EstoqueNotFoundException("Estoque com ID " + idEstoque + " não localizado."));
+
+            estoque.setIdEstoque(existente.getIdEstoque());
+            estoque.setUbsCnes(existente.getUbsCnes());
+            estoque.setInsumoSku(existente.getInsumoSku());
+
+            Estoque atualizado = estoqueRepositoryPort.atualizarEstoque(estoque);
+            return montaResponse(atualizado, "atualizar");
+        } catch (EstoqueNotFoundException | ErroNegocioException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao atualizar Estoque", e);
+            throw new ErroInternoException("Erro interno ao tentar atualizar Estoque: " + e.getMessage());
         }
     }
 

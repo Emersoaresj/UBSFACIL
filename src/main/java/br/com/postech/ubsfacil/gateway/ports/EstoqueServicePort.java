@@ -14,4 +14,6 @@ public interface EstoqueServicePort {
     List<Estoque> buscarPorFiltro(String cnes, String sku);
 
     List<Estoque> buscarTodos();
+
+    ResponseDto atualizarEstoque(Integer idEstoque, Estoque estoque);
 }
