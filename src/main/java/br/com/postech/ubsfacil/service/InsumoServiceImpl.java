@@ -67,7 +67,7 @@ public class InsumoServiceImpl implements InsumoServicePort {
     public List<Insumo> buscarPorTipo(String tipo) {
         try {
             Insumo.validarTiposInsumo(tipo);
-            return repositoryPort.findByTipo(tipo);
+            return repositoryPort.findByTipo(tipo.toUpperCase());
         } catch (InsumoNotFoundException e) {
             throw e;
         } catch (Exception e) {
