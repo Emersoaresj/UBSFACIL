@@ -9,6 +9,7 @@ import br.com.postech.ubsfacil.gateway.ports.EstoqueRepositoryPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -41,6 +42,28 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
         } catch (Exception e) {
             log.error("Erro ao buscar Estoque por ID", e);
             throw new ErroInternoException("Erro ao buscar Estoque por ID: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Estoque> findByCnesAndSku(String cnes, String sku) {
+        try {
+            List<EstoqueEntity> entities = estoqueRepositoryJPA.findByUbsCnesAndInsumoSku(cnes, sku);
+            return EstoqueMapper.INSTANCE.listEntityToDomain(entities);
+        } catch (Exception e) {
+            log.error("Erro ao buscar Estoques por CNES e SKU", e);
+            throw new ErroInternoException("Erro ao buscar Estoques por CNES e SKU: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Estoque> findAll() {
+        try {
+            List<EstoqueEntity> entities = estoqueRepositoryJPA.findAll();
+            return EstoqueMapper.INSTANCE.listEntityToDomain(entities);
+        } catch (Exception e) {
+            log.error("Erro ao buscar todos os Estoques", e);
+            throw new ErroInternoException("Erro ao buscar todos os Estoques: " + e.getMessage());
         }
     }
 

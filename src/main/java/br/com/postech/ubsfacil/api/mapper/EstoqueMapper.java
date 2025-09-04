@@ -8,6 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface EstoqueMapper {
 
@@ -21,4 +23,8 @@ public interface EstoqueMapper {
     EstoqueEntity domainToEntity(Estoque estoque);
 
     EstoqueResponseDto domainToResponse(Estoque estoque);
+
+    List<EstoqueResponseDto> listDomainToResponse(List<Estoque> estoque);
+
+    List<Estoque> listEntityToDomain(List<EstoqueEntity> entities);
 }

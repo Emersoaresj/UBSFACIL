@@ -77,9 +77,6 @@ public class Estoque {
         if (ubsCnes == null) {
             throw new ErroNegocioException("CNES da UBS é obrigatório.");
         }
-        if (!CNES_PATTERN.matcher(ubsCnes).matches()) {
-            throw new ErroNegocioException("O CNES deve conter exatamente 7 dígitos");
-        }
         if (insumoSku == null || insumoSku.isBlank()) {
             throw new ErroNegocioException("SKU do insumo é obrigatório.");
         }
@@ -88,6 +85,12 @@ public class Estoque {
         }
         if (estoqueMinimo < 0) {
             throw new ErroNegocioException("Estoque mínimo não pode ser negativo.");
+        }
+    }
+
+    public static void validarCnes(String ubsCnes) {
+        if (ubsCnes == null || !CNES_PATTERN.matcher(ubsCnes).matches()) {
+            throw new ErroNegocioException("CNES inválido. Deve conter exatamente 7 dígitos numéricos.");
         }
     }
 

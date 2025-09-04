@@ -3,8 +3,11 @@ package br.com.postech.ubsfacil.api.controller;
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueRequestDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;
+import br.com.postech.ubsfacil.api.dto.insumos.InsumoResponseDto;
 import br.com.postech.ubsfacil.api.mapper.EstoqueMapper;
+import br.com.postech.ubsfacil.api.mapper.InsumoMapper;
 import br.com.postech.ubsfacil.domain.Estoque;
+import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.gateway.ports.EstoqueServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,6 +16,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/estoque")
@@ -42,6 +47,27 @@ public class EstoqueController {
             @PathVariable("idEstoque") Integer idEstoque) {
         Estoque response = servicePort.buscarEstoquePorId(idEstoque);
         EstoqueResponseDto dto = EstoqueMapper.INSTANCE.domainToResponse(response);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
+    @GetMapping()
+    @Operation(summary = "Listar estoques",
+            description = "Endpoint para listar todos os estoques ou filtrar por uma UBS e SKU de insumo.")
+    public ResponseEntity<List<EstoqueResponseDto>> buscarEstoques(
+            @Parameter(description = "CNES da Unidade Básica de Saúde", example = "1234567")
+            @RequestParam(value = "cnes", required = false) String cnes,
+            @Parameter(description = "SKU do insumo", example = "INS12345")
+            @RequestParam(value = "sku", required = false) String sku){
+
+        List<Estoque> response;
+
+        if (cnes != null && sku != null) {
+            response = servicePort.buscarPorFiltro(cnes, sku);
+        } else {
+            response = servicePort.buscarTodos();
+        }
+        List<EstoqueResponseDto> dto = EstoqueMapper.INSTANCE.listDomainToResponse(response);
+
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 }

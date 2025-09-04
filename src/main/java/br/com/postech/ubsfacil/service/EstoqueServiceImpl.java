@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -35,6 +36,7 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
     @Override
     public ResponseDto cadastrarEstoque(Estoque estoque) {
         try {
+            estoque.validarCnes(estoque.getUbsCnes());
             estoque.validarCamposObrigatorios();
             estoque.validarDataValidade();
 
@@ -72,6 +74,36 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
         } catch (Exception e) {
             log.error("Erro inesperado ao buscar Estoque", e);
             throw new ErroInternoException("Erro interno ao tentar buscar Estoque: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Estoque> buscarPorFiltro(String cnes, String sku) {
+        try {
+            Estoque.validarCnes(cnes);
+            if (ubsRepositoryPort.findByCnes(cnes).isEmpty()){
+                log.error("UBS com CNES {} não encontrada", cnes);
+                throw new ErroNegocioException("Não foi possível localizar uma UBS com o CNES " + cnes + " fornecido.");
+            }
+            if (insumoRepositoryPort.findBySku(sku).isEmpty()){
+                log.error("Insumo com SKU {} não encontrado", sku);
+                throw new ErroNegocioException("Não foi possível localizar um Insumo com o SKU " + sku + " fornecido.");
+            }
+
+            return estoqueRepositoryPort.findByCnesAndSku(cnes, sku);
+        } catch (Exception e) {
+            log.error("Erro inesperado ao buscar Estoques por filtro", e);
+            throw new ErroInternoException("Erro interno ao tentar buscar Estoques por filtro: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Estoque> buscarTodos() {
+        try {
+            return estoqueRepositoryPort.findAll();
+        } catch (Exception e) {
+            log.error("Erro inesperado ao buscar todos os Estoques", e);
+            throw new ErroInternoException("Erro interno ao tentar buscar todos os Estoques: " + e.getMessage());
         }
     }
 
