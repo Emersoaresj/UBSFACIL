@@ -4,6 +4,8 @@ import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsRequestDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsResponseDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsUpdateDto;
+import br.com.postech.ubsfacil.api.mapper.UbsMapper;
+import br.com.postech.ubsfacil.domain.Ubs;
 import br.com.postech.ubsfacil.gateway.ports.ubs.UbsServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,7 +30,8 @@ public class UbsController {
             description = "Endpoint para cadastrar uma nova Unidade Básica de Saúde")
     @PostMapping("/cadastro")
     public ResponseEntity<ResponseDto> cadastrarUbs(@Valid @RequestBody UbsRequestDto ubsRequestDto) {
-        ResponseDto cadastro = service.cadastraUbs(ubsRequestDto);
+        Ubs ubs = UbsMapper.INSTANCE.requestCreateToDomain(ubsRequestDto);
+        ResponseDto cadastro = service.cadastraUbs(ubs);
         return ResponseEntity.status(HttpStatus.CREATED).body(cadastro);
     }
 
@@ -57,13 +60,17 @@ public class UbsController {
     @PutMapping("/atualizacao/{cnes}")
     @Operation(summary = "Atualizar dados de uma UBS",
             description = "Endpoint para atualizar os dados de uma Unidade Básica de Saúde pelo CNES")
-    public ResponseEntity<ResponseDto> atualizarUbs(
+    public ResponseEntity<UbsResponseDto> atualizarUbs(
             @Parameter(description = "CNES da UBS (apenas números)", example = "1234567")
             @PathVariable("cnes") String cnes,
             @Valid @RequestBody UbsUpdateDto ubsRequestDto) {
+        Ubs ubs = UbsMapper.INSTANCE.dtoToDomain(ubsRequestDto);
 
-        ResponseDto response = service.atualizarUbs(cnes, ubsRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        Ubs atualizado = service.atualizarUbs(cnes, ubs);
+
+        UbsResponseDto dto = UbsMapper.INSTANCE.domainToDto(atualizado);
+
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @DeleteMapping("/delete/{cnes}")

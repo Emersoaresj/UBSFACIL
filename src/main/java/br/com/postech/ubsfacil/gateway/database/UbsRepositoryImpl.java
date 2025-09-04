@@ -1,21 +1,17 @@
 package br.com.postech.ubsfacil.gateway.database;
 
-import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.mapper.UbsMapper;
 import br.com.postech.ubsfacil.domain.Ubs;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.gateway.database.entity.UbsEntity;
 import br.com.postech.ubsfacil.gateway.database.repository.UbsRepositoryJPA;
 import br.com.postech.ubsfacil.gateway.ports.ubs.UbsRepositoryPort;
-import br.com.postech.ubsfacil.utils.ConstantUtils;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -27,11 +23,11 @@ public class UbsRepositoryImpl implements UbsRepositoryPort {
 
     @Transactional
     @Override
-    public ResponseDto cadastraUbs(Ubs ubs) {
+    public Ubs cadastraUbs(Ubs ubs) {
         try {
             UbsEntity ubsEntity = UbsMapper.INSTANCE.domainToEntity(ubs);
             ubsRepositoryJPA.save(ubsEntity);
-            return montaResponse(ubsEntity, "cadastro");
+            return UbsMapper.INSTANCE.entityToDomain(ubsEntity);
         } catch (Exception e) {
             log.error("Erro ao cadastrar UBS", e);
             throw new ErroInternoException("Erro ao cadastrar UBS: " + e.getMessage());
@@ -84,11 +80,11 @@ public class UbsRepositoryImpl implements UbsRepositoryPort {
 
     @Transactional
     @Override
-    public ResponseDto atualizarUbs(Ubs ubs) {
+    public Ubs atualizarUbs(Ubs ubs) {
         try {
             UbsEntity ubsEntity = UbsMapper.INSTANCE.updateDomainToEntity(ubs);
             ubsRepositoryJPA.save(ubsEntity);
-            return montaResponse(ubsEntity, "update");
+            return UbsMapper.INSTANCE.entityToDomain(ubsEntity);
         } catch (Exception e) {
             log.error("Erro ao atualizar ubs", e);
             throw new ErroInternoException("Erro ao atualizar ubs: " + e.getMessage());
@@ -106,19 +102,4 @@ public class UbsRepositoryImpl implements UbsRepositoryPort {
         }
     }
 
-
-    private ResponseDto montaResponse(UbsEntity ubsEntity, String acao) {
-        ResponseDto response = new ResponseDto();
-
-        response.setMessage("cadastro".equals(acao) ? ConstantUtils.UBS_CADASTRADA : ConstantUtils.UBS_ATUALIZADA);
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("nomeUbs", ubsEntity.getNome());
-        data.put("cidadeUbs", ubsEntity.getCidade());
-        data.put("bairroUbs", ubsEntity.getBairro());
-        data.put("telefoneUbs", ubsEntity.getTelefone());
-
-        response.setData(data);
-        return response;
-    }
 }

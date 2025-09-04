@@ -1,7 +1,10 @@
 package br.com.postech.ubsfacil.api.mapper;
 
+import br.com.postech.ubsfacil.api.dto.insumos.InsumoResponseDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsRequestDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsResponseDto;
+import br.com.postech.ubsfacil.api.dto.ubs.UbsUpdateDto;
+import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.domain.Ubs;
 import br.com.postech.ubsfacil.gateway.database.entity.UbsEntity;
 import org.mapstruct.Mapper;
@@ -28,4 +31,6 @@ public interface UbsMapper {
     UbsResponseDto domainToDto(Ubs ubs);
 
     UbsEntity updateDomainToEntity(Ubs ubs);
+
+    Ubs dtoToDomain(UbsUpdateDto ubsRequestDto);
 }

@@ -3,7 +3,6 @@ package br.com.postech.ubsfacil.api.controller;
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoRequestDto;
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoResponseDto;
-import br.com.postech.ubsfacil.api.dto.ubs.UbsResponseDto;
 import br.com.postech.ubsfacil.api.mapper.InsumoMapper;
 import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.gateway.ports.InsumoServicePort;
