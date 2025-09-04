@@ -6,6 +6,7 @@ import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.gateway.database.entity.EstoqueEntity;
 import br.com.postech.ubsfacil.gateway.database.repository.EstoqueRepositoryJPA;
 import br.com.postech.ubsfacil.gateway.ports.EstoqueRepositoryPort;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,7 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
         this.estoqueRepositoryJPA = estoqueRepositoryJPA;
     }
 
+    @Transactional
     @Override
     public Estoque cadastrarEstoque(Estoque estoque) {
         try {
@@ -67,6 +69,7 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
         }
     }
 
+    @Transactional
     @Override
     public Estoque atualizarEstoque(Estoque estoque) {
         try {
@@ -87,6 +90,18 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
         } catch (Exception e) {
             log.error("Erro ao buscar SKU", e);
             throw new ErroInternoException("Erro ao buscar SKU: " + e.getMessage());
+        }
+    }
+
+
+    @Transactional
+    @Override
+    public void deletarEstoque(Integer idEstoque) {
+        try {
+            estoqueRepositoryJPA.deleteById(idEstoque);
+        } catch (Exception e) {
+            log.error("Erro ao deletar Estoque", e);
+            throw new ErroInternoException("Erro ao deletar Estoque: " + e.getMessage());
         }
     }
 }

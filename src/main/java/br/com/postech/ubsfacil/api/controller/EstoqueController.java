@@ -84,4 +84,15 @@ public class EstoqueController {
 
         return ResponseEntity.status(HttpStatus.OK).body(atualizado);
     }
+
+    @DeleteMapping("/deletar/{idEstoque}")
+    @Operation(summary = "Excluir estoque",
+            description = "Endpoint para excluir um estoque pelo IdEstoque.")
+    public ResponseEntity<Void> deletarEstoque(
+            @Parameter(description = "ID do estoque", example = "1")
+            @PathVariable("idEstoque") Integer idEstoque) {
+
+        servicePort.deletarEstoque(idEstoque);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

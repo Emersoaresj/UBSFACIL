@@ -18,4 +18,6 @@ public interface EstoqueRepositoryPort {
     List<Estoque> findAll();
 
     Estoque atualizarEstoque(Estoque estoque);
+
+    void deletarEstoque(Integer idEstoque);
 }

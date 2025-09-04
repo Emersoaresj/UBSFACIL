@@ -16,4 +16,6 @@ public interface EstoqueServicePort {
     List<Estoque> buscarTodos();
 
     ResponseDto atualizarEstoque(Integer idEstoque, Estoque estoque);
+
+    void deletarEstoque(Integer idEstoque);
 }

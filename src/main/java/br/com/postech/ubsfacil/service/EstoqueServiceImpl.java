@@ -137,6 +137,21 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
         }
     }
 
+    @Override
+    public void deletarEstoque(Integer idEstoque) {
+        try {
+            Estoque existente = estoqueRepositoryPort.findByIdEstoque(idEstoque)
+                    .orElseThrow(() -> new EstoqueNotFoundException("Estoque com ID " + idEstoque + " não localizado."));
+
+            estoqueRepositoryPort.deletarEstoque(existente.getIdEstoque());
+        } catch (EstoqueNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao deletar Estoque", e);
+            throw new ErroInternoException("Erro interno ao tentar deletar Estoque: " + e.getMessage());
+        }
+    }
+
 
     private ResponseDto montaResponse(Estoque estoque, String acao) {
         ResponseDto response = new ResponseDto();
