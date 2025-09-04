@@ -5,7 +5,7 @@ import br.com.postech.ubsfacil.domain.Estoque;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.gateway.database.entity.EstoqueEntity;
 import br.com.postech.ubsfacil.gateway.database.repository.EstoqueRepositoryJPA;
-import br.com.postech.ubsfacil.gateway.ports.EstoqueRepositoryPort;
+import br.com.postech.ubsfacil.gateway.ports.estoque.EstoqueRepositoryPort;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;

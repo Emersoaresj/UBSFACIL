@@ -1,4 +1,4 @@
-package br.com.postech.ubsfacil.gateway.ports;
+package br.com.postech.ubsfacil.gateway.ports.estoque;
 
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;

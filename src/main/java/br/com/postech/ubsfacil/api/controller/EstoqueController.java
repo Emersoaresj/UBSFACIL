@@ -7,7 +7,7 @@ import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;
 import br.com.postech.ubsfacil.api.dto.estoque.MovimentacaoRequestDto;
 import br.com.postech.ubsfacil.api.mapper.EstoqueMapper;
 import br.com.postech.ubsfacil.domain.Estoque;
-import br.com.postech.ubsfacil.gateway.ports.EstoqueServicePort;
+import br.com.postech.ubsfacil.gateway.ports.estoque.EstoqueServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
