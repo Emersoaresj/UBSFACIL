@@ -31,4 +31,12 @@ public class Insumo {
             throw new ErroNegocioException("Insumos do tipo 'Medicamento' devem ter validade controlada!");
         }
     }
+
+    public static void validarTiposInsumo(String tipo) {
+        try {
+            TipoInsumo.valueOf(tipo.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new ErroNegocioException("Tipo de insumo inválido. Tipos válidos: MEDICAMENTO, MATERIAL_HOSPITALAR, ODONTOLOGICO, OUTROS");
+        }
+    }
 }

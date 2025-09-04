@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -59,6 +60,29 @@ public class InsumoServiceImpl implements InsumoServicePort {
         } catch (Exception e) {
             log.error("Erro inesperado ao buscar Insumo", e);
             throw new ErroInternoException("Erro interno ao tentar buscar Insumo: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Insumo> buscarPorTipo(String tipo) {
+        try {
+            Insumo.validarTiposInsumo(tipo);
+            return repositoryPort.findByTipo(tipo);
+        } catch (InsumoNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao buscar Insumos por tipo", e);
+            throw new ErroInternoException("Erro interno ao tentar buscar Insumos por tipo: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Insumo> buscarTodos() {
+        try {
+            return repositoryPort.buscarTodos();
+        } catch (Exception e) {
+            log.error("Erro inesperado ao buscar todos os Insumos", e);
+            throw new ErroInternoException("Erro interno ao tentar buscar todos os Insumos: " + e.getMessage());
         }
     }
 

@@ -3,6 +3,7 @@ package br.com.postech.ubsfacil.api.controller;
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoRequestDto;
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoResponseDto;
+import br.com.postech.ubsfacil.api.dto.ubs.UbsResponseDto;
 import br.com.postech.ubsfacil.api.mapper.InsumoMapper;
 import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.gateway.ports.InsumoServicePort;
@@ -13,6 +14,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/insumos")
@@ -43,5 +46,25 @@ public class InsumoController {
         InsumoResponseDto dto = InsumoMapper.INSTANCE.domainToResponse(response);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
+
+    @GetMapping()
+    @Operation(summary = "Listar insumos",
+            description = "Endpoint para listar todos os insumos ou filtrar pelo tipo.")
+    public ResponseEntity<List<InsumoResponseDto>> buscarPorTipo(
+            @Parameter(description = "Tipo do Insumo", example = "Medicamento")
+            @RequestParam(value = "tipo", required = false) String tipo){
+
+        List<Insumo> response;
+
+        if (tipo != null) {
+            response = servicePort.buscarPorTipo(tipo);
+        } else {
+            response = servicePort.buscarTodos();
+        }
+        List<InsumoResponseDto> dto = InsumoMapper.INSTANCE.listDomainToResponse(response);
+
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
 
 }

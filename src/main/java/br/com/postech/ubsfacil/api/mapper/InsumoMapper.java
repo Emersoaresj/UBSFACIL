@@ -8,6 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface InsumoMapper {
 
@@ -22,4 +24,8 @@ public interface InsumoMapper {
     Insumo entityToDomain(InsumoEntity insumoEntity);
 
     InsumoResponseDto domainToResponse(Insumo insumo);
+
+    List<InsumoResponseDto> listDomainToResponse(List<Insumo> insumo);
+
+    List<Insumo> listEntityToDomain(List<InsumoEntity> insumoEntity);
 }
