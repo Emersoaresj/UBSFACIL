@@ -28,4 +28,6 @@ public interface InsumoMapper {
     List<InsumoResponseDto> listDomainToResponse(List<Insumo> insumo);
 
     List<Insumo> listEntityToDomain(List<InsumoEntity> insumoEntity);
+
+    InsumoEntity updateDomainToEntity (Insumo insumo);
 }

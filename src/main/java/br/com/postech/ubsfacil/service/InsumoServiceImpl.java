@@ -86,6 +86,26 @@ public class InsumoServiceImpl implements InsumoServicePort {
         }
     }
 
+    @Override
+    public Insumo atualizarInsumo(Insumo insumo) {
+        try {
+            insumo.validarCamposObrigatorios();
+            insumo.validarRegraPorTipo();
+
+            Insumo existente = repositoryPort.findBySku(insumo.getSku())
+                    .orElseThrow(() -> new InsumoNotFoundException("Insumo com SKU " + insumo.getSku() + " não localizado."));
+
+            insumo.setIdInsumo(existente.getIdInsumo());
+
+            return repositoryPort.atualizarInsumo(insumo);
+        } catch (InsumoNotFoundException | ErroNegocioException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao atualizar Insumo", e);
+            throw new ErroInternoException("Erro interno ao tentar atualizar Insumo: " + e.getMessage());
+        }
+    }
+
     private ResponseDto montaResponse(Insumo insumo, String acao) {
         ResponseDto response = new ResponseDto();
 

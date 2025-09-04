@@ -68,4 +68,16 @@ public class InsumoRepositoryImpl implements InsumoRepositoryPort {
         }
     }
 
+    @Override
+    public Insumo atualizarInsumo(Insumo insumo) {
+        try {
+            InsumoEntity insumoEntity = InsumoMapper.INSTANCE.updateDomainToEntity(insumo);
+            insumoRepositoryJPA.save(insumoEntity);
+            return InsumoMapper.INSTANCE.entityToDomain(insumoEntity);
+        } catch (Exception e) {
+            log.error("Erro ao atualizar Insumo", e);
+            throw new ErroInternoException("Erro ao atualizar Insumo: " + e.getMessage());
+        }
+    }
+
 }

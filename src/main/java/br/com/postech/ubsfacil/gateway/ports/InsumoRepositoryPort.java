@@ -14,4 +14,6 @@ public interface InsumoRepositoryPort {
     List<Insumo> findByTipo(String tipo);
 
     List<Insumo> buscarTodos();
+
+    Insumo atualizarInsumo(Insumo insumo);
 }

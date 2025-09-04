@@ -14,4 +14,6 @@ public interface InsumoServicePort {
     List<Insumo> buscarPorTipo(String tipo);
 
     List<Insumo> buscarTodos();
+
+    Insumo atualizarInsumo(Insumo insumo);
 }
