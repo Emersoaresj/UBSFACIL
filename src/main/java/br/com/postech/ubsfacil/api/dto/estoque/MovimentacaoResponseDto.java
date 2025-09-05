@@ -5,12 +5,12 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class MovimentacaoRequestDto {
+public class MovimentacaoResponseDto {
+
+    private String message;
     private String ubsCnes;
     private String insumoSku;
-    private Integer quantidadeMovimentada;
+    private Integer quantidadeTotal;
     private LocalDate validade;
-    private Integer estoqueMinimo;
-    private String tipoMovimentacao;
-    private String motivo;
+    private TipoMovimentacao tipoMovimentacao;
 }

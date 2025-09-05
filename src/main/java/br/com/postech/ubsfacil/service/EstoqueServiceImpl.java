@@ -2,6 +2,7 @@ package br.com.postech.ubsfacil.service;
 
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;
+import br.com.postech.ubsfacil.api.dto.estoque.MovimentacaoResponseDto;
 import br.com.postech.ubsfacil.api.dto.estoque.TipoMovimentacao;
 import br.com.postech.ubsfacil.api.mapper.EstoqueMapper;
 import br.com.postech.ubsfacil.domain.Estoque;
@@ -165,7 +166,7 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
     }
 
     @Override
-    public EstoqueResponseDto registrarMovimentacao(Estoque estoque, String tipoMovimentacaoStr, String motivo) {
+    public MovimentacaoResponseDto registrarMovimentacao(Estoque estoque, String tipoMovimentacaoStr, String motivo) {
         try {
             estoque.validarCamposObrigatorios();
             estoque.validarDataValidade();
@@ -175,17 +176,14 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
 
             TipoMovimentacao tipoMovimentacao = TipoMovimentacao.valueOf(tipoMovimentacaoStr.toUpperCase());
 
-            // Validação de existência
             if (ubsRepositoryPort.findByCnes(estoque.getUbsCnes()).isEmpty()) {
                 throw new ErroNegocioException("UBS com CNES " + estoque.getUbsCnes() + " não encontrada.");
             }
-
             if (insumoRepositoryPort.findBySku(estoque.getInsumoSku()).isEmpty()) {
                 throw new ErroNegocioException("Insumo com SKU " + estoque.getInsumoSku() + " não encontrado.");
             }
 
-            Estoque estoqueAtual = estoqueRepositoryPort
-                    .findByCnesAndSku(estoque.getUbsCnes(), estoque.getInsumoSku())
+            Estoque estoqueAtual = estoqueRepositoryPort.findByCnesAndSku(estoque.getUbsCnes(), estoque.getInsumoSku())
                     .orElse(null);
 
             boolean isEntrada = tipoMovimentacao == TipoMovimentacao.ENTRADA;
@@ -196,6 +194,14 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
                 }
                 estoqueRepositoryPort.cadastrarEstoque(estoque);
                 estoqueAtual = estoque;
+
+                criarMovimentacao(estoque, motivo, tipoMovimentacao);
+
+                alertaServicePort.verificarEAvisar(estoqueAtual);
+                MovimentacaoResponseDto responseDto = EstoqueMapper.INSTANCE.domainToMovimentacaoResponse(estoqueAtual);
+                responseDto.setMessage(String.format("Estoque criado e movimentação de %s registrada com sucesso.", tipoMovimentacao));
+                responseDto.setTipoMovimentacao(tipoMovimentacao);
+                return responseDto;
             } else {
                 int novaQuantidade = isEntrada
                         ? estoqueAtual.getQuantidade() + estoque.getQuantidade()
@@ -209,24 +215,14 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
                 estoqueRepositoryPort.atualizarEstoque(estoqueAtual);
             }
 
-            // Registrar movimentação
-            Movimentacao movimentacao = new Movimentacao(
-                    null,
-                    estoque.getUbsCnes(),
-                    estoque.getInsumoSku(),
-                    tipoMovimentacao,
-                    estoque.getQuantidade(),
-                    motivo != null ? motivo : "Movimentação automática",
-                    LocalDate.now()
-            );
+            criarMovimentacao(estoque, motivo, tipoMovimentacao);
 
-            movimentacaoRepositoryPort.salvarMovimentacao(movimentacao);
-
-            // Gerar alertas
             alertaServicePort.verificarEAvisar(estoqueAtual);
 
-            return EstoqueMapper.INSTANCE.domainToResponse(estoqueAtual);
-
+            MovimentacaoResponseDto responseDto = EstoqueMapper.INSTANCE.domainToMovimentacaoResponse(estoqueAtual);
+            responseDto.setMessage(String.format("Estoque atualizado e movimentação de %s registrada com sucesso.", tipoMovimentacao));
+            responseDto.setTipoMovimentacao(tipoMovimentacao);
+            return responseDto;
         } catch (ErroNegocioException e) {
             throw e;
         } catch (Exception e) {
@@ -235,6 +231,18 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
         }
     }
 
+    private void criarMovimentacao(Estoque estoque, String motivo, TipoMovimentacao tipoMovimentacao) {
+        Movimentacao movimentacao = new Movimentacao(
+                null,
+                estoque.getUbsCnes(),
+                estoque.getInsumoSku(),
+                tipoMovimentacao,
+                estoque.getQuantidade(),
+                motivo != null ? motivo : "Movimentação automática",
+                LocalDate.now()
+        );
+        movimentacaoRepositoryPort.salvarMovimentacao(movimentacao);
+    }
 
 
     private ResponseDto montaResponse(Estoque estoque, String acao) {

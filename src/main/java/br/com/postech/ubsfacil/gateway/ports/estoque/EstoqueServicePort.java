@@ -1,7 +1,7 @@
 package br.com.postech.ubsfacil.gateway.ports.estoque;
 
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
-import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;
+import br.com.postech.ubsfacil.api.dto.estoque.MovimentacaoResponseDto;
 import br.com.postech.ubsfacil.domain.Estoque;
 
 import java.util.List;
@@ -21,5 +21,5 @@ public interface EstoqueServicePort {
 
     void deletarEstoque(Integer idEstoque);
 
-    EstoqueResponseDto registrarMovimentacao(Estoque estoque, String tipoMovimentacao, String motivo);
+    MovimentacaoResponseDto registrarMovimentacao(Estoque estoque, String tipoMovimentacao, String motivo);
 }

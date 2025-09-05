@@ -1,10 +1,7 @@
 package br.com.postech.ubsfacil.api.controller;
 
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
-import br.com.postech.ubsfacil.api.dto.estoque.EstoqueRequestDto;
-import br.com.postech.ubsfacil.api.dto.estoque.EstoqueRequestUpdateDto;
-import br.com.postech.ubsfacil.api.dto.estoque.EstoqueResponseDto;
-import br.com.postech.ubsfacil.api.dto.estoque.MovimentacaoRequestDto;
+import br.com.postech.ubsfacil.api.dto.estoque.*;
 import br.com.postech.ubsfacil.api.mapper.EstoqueMapper;
 import br.com.postech.ubsfacil.domain.Estoque;
 import br.com.postech.ubsfacil.gateway.ports.estoque.EstoqueServicePort;
@@ -104,11 +101,11 @@ public class EstoqueController {
     @PostMapping("/movimentacoes")
     @Operation(summary = "Registrar movimentação de estoque",
             description = "Endpoint para registrar uma entrada ou saída de insumos em uma UBS.")
-    public ResponseEntity<EstoqueResponseDto> registrarMovimentacao(
+    public ResponseEntity<MovimentacaoResponseDto> registrarMovimentacao(
             @Valid @RequestBody MovimentacaoRequestDto requestDto) {
 
         Estoque estoque = EstoqueMapper.INSTANCE.movimentacaoRequestToDomain(requestDto);
-        EstoqueResponseDto response = servicePort.registrarMovimentacao(estoque, requestDto.getTipoMovimentacao(), requestDto.getMotivo());
+        MovimentacaoResponseDto response = servicePort.registrarMovimentacao(estoque, requestDto.getTipoMovimentacao(), requestDto.getMotivo());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
