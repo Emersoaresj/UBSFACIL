@@ -68,4 +68,12 @@ public class Alerta {
     public void setDataAlerta(LocalDate dataAlerta) {
         this.dataAlerta = dataAlerta;
     }
+
+
+    public static boolean validarTipoAlerta(TipoAlerta tipoAlerta) {
+        return tipoAlerta == TipoAlerta.ESGOTADO ||
+               tipoAlerta == TipoAlerta.ESTOQUE_BAIXO ||
+               tipoAlerta == TipoAlerta.VENCIDO ||
+               tipoAlerta == TipoAlerta.VENCIMENTO_PROXIMO;
+    }
 }

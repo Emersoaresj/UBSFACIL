@@ -1,5 +1,6 @@
 package br.com.postech.ubsfacil.domain.exceptions;
 
+import br.com.postech.ubsfacil.api.dto.estoque.TipoAlerta;
 import br.com.postech.ubsfacil.api.dto.insumos.TipoInsumo;
 import br.com.postech.ubsfacil.domain.exceptions.estoque.EstoqueNotFoundException;
 import br.com.postech.ubsfacil.domain.exceptions.insumos.InsumoNotFoundException;
@@ -85,6 +86,15 @@ public class GlobalHandlerException {
                 Arrays.toString(TipoInsumo.values()));
         response.put("path", request.getRequestURI());
 
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(TipoAlertaException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalArgumentTipoAlertaException(TipoAlertaException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("timestamp", LocalDateTime.now());
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put(MENSAGEM, ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
