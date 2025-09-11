@@ -17,6 +17,8 @@ public class Ubs {
     private String cidade;
     private String uf;
     private String cep;
+    private Double latitude;
+    private Double longitude;
 
 
     public Ubs(Integer idUbs, String nome, String cnes, String telefone, String logradouro, String numero, String bairro, String cidade, String uf, String cep) {
@@ -110,6 +112,18 @@ public class Ubs {
 
     public void setCep(String cep) {
         this.cep = cep;
+    }
+    public Double getLatitude() {
+        return latitude;
+    }
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+    public Double getLongitude() {
+        return longitude;
+    }
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
 

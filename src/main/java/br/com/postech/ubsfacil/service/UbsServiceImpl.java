@@ -7,6 +7,8 @@ import br.com.postech.ubsfacil.domain.Ubs;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
 import br.com.postech.ubsfacil.domain.exceptions.ubs.UbsNotFoundException;
+import br.com.postech.ubsfacil.gateway.client.GeocordingServicePort;
+import br.com.postech.ubsfacil.gateway.client.dto.Coordenada;
 import br.com.postech.ubsfacil.gateway.ports.ubs.UbsRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.ubs.UbsServicePort;
 import br.com.postech.ubsfacil.utils.ConstantUtils;
@@ -23,9 +25,14 @@ import java.util.Map;
 @Service
 public class UbsServiceImpl implements UbsServicePort {
 
-    @Autowired
-    private UbsRepositoryPort ubsRepositoryPort;
 
+    private final UbsRepositoryPort ubsRepositoryPort;
+    private final GeocordingServicePort geocodingServicePort;
+
+    public UbsServiceImpl(UbsRepositoryPort ubsRepositoryPort, GeocordingServicePort geocodingServicePort) {
+        this.ubsRepositoryPort = ubsRepositoryPort;
+        this.geocodingServicePort = geocodingServicePort;
+    }
 
 
     @Override
@@ -37,7 +44,12 @@ public class UbsServiceImpl implements UbsServicePort {
                 throw new ErroNegocioException("UBS com CNES " + ubs.getCnes() + " já cadastrada");
             }
            ubs.validarUbs();
-           Ubs saved = ubsRepositoryPort.cadastraUbs(ubs);
+
+            Coordenada coordenada = geocodingServicePort.buscarCoordenadasPorCep(ubs.getCep());
+            ubs.setLatitude(coordenada.getLatitude());
+            ubs.setLongitude(coordenada.getLongitude());
+
+            Ubs saved = ubsRepositoryPort.cadastraUbs(ubs);
 
             return montaResponse(saved, "cadastro");
 

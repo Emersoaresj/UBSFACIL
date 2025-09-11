@@ -39,4 +39,10 @@ public class UbsEntity {
 
     @Column(name = "cep")
     private String cep;
+
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
 }
