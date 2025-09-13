@@ -1,7 +1,7 @@
 package br.com.postech.ubsfacil.domain.exceptions;
 
-import br.com.postech.ubsfacil.api.dto.estoque.TipoAlerta;
 import br.com.postech.ubsfacil.api.dto.insumos.TipoInsumo;
+import br.com.postech.ubsfacil.domain.exceptions.alertas.TipoAlertaException;
 import br.com.postech.ubsfacil.domain.exceptions.estoque.EstoqueNotFoundException;
 import br.com.postech.ubsfacil.domain.exceptions.insumos.InsumoNotFoundException;
 import br.com.postech.ubsfacil.domain.exceptions.ubs.UbsNotFoundException;
@@ -114,6 +114,17 @@ public class GlobalHandlerException {
         response.put(MENSAGEM, estoqueNotFoundException.getMessage());
         response.put(STATUS, HttpStatus.NOT_FOUND.value());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ErroExternoException.class)
+    public ResponseEntity<Map<String, Object>> handlerErroExternoException(ErroExternoException erroExternoException, WebRequest request) {
+        Map<String, Object> response = new HashMap<>();
+        response.put(TIMESTAMP, LocalDateTime.now());
+        response.put(STATUS, HttpStatus.BAD_GATEWAY.value());
+        response.put(ERROR, "Erro de serviço externo.");
+        response.put(MENSAGEM, erroExternoException.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
     }
 
 }

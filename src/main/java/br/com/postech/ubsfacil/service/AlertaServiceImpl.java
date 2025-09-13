@@ -5,7 +5,7 @@ import br.com.postech.ubsfacil.domain.Alerta;
 import br.com.postech.ubsfacil.domain.Estoque;
 import br.com.postech.ubsfacil.domain.Ubs;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
-import br.com.postech.ubsfacil.domain.exceptions.TipoAlertaException;
+import br.com.postech.ubsfacil.domain.exceptions.alertas.TipoAlertaException;
 import br.com.postech.ubsfacil.domain.exceptions.ubs.UbsNotFoundException;
 import br.com.postech.ubsfacil.gateway.ports.AlertaRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.AlertaServicePort;

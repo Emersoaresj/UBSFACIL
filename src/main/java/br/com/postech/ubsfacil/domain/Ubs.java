@@ -130,13 +130,13 @@ public class Ubs {
     private static final Pattern CNES_PATTERN = Pattern.compile("^\\d{7}$");
     private static final Pattern TELEFONE_PATTERN = Pattern.compile("^\\(\\d{2}\\) ?\\d{4}-\\d{4}$");
     private static final Pattern UF_PATTERN = Pattern.compile("^[A-Z]{2}$");
-    private static final Pattern CEP_PATTERN = Pattern.compile("^\\d{5}-?\\d{3}$");
+    private static final Pattern CEP_PATTERN = Pattern.compile("^\\d{5}-\\d{3}$");
 
     private void validarPatternUbs() {
         if (!CNES_PATTERN.matcher(cnes).matches()) throw new ErroNegocioException("O CNES deve conter exatamente 7 dígitos");
         if (!TELEFONE_PATTERN.matcher(telefone).matches()) throw new ErroNegocioException("O telefone deve estar no formato (XX) XXXX-XXXX");
         if (!UF_PATTERN.matcher(uf).matches()) throw new ErroNegocioException("UF deve ter 2 letras maiúsculas");
-        if (!CEP_PATTERN.matcher(cep).matches()) throw new ErroNegocioException("CEP deve estar no formato 00000-000 ou 00000000");
+        if (!CEP_PATTERN.matcher(cep).matches()) throw new ErroNegocioException("CEP deve estar no formato 00000-000");
     }
 
     private void validarCamposObrigatorios() {

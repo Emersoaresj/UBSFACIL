@@ -4,6 +4,7 @@ import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsResponseDto;
 import br.com.postech.ubsfacil.api.mapper.UbsMapper;
 import br.com.postech.ubsfacil.domain.Ubs;
+import br.com.postech.ubsfacil.domain.exceptions.ErroExternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
 import br.com.postech.ubsfacil.domain.exceptions.ubs.UbsNotFoundException;
@@ -53,7 +54,7 @@ public class UbsServiceImpl implements UbsServicePort {
 
             return montaResponse(saved, "cadastro");
 
-        } catch (ErroInternoException e) {
+        } catch (ErroInternoException | ErroNegocioException | ErroExternoException e) {
             throw e;
         } catch (Exception e) {
             log.error("Erro inesperado ao cadastrar UBS", e);
