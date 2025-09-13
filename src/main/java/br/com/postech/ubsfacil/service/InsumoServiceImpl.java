@@ -1,10 +1,12 @@
 package br.com.postech.ubsfacil.service;
 
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
+import br.com.postech.ubsfacil.domain.Estoque;
 import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
 import br.com.postech.ubsfacil.domain.exceptions.insumos.InsumoNotFoundException;
+import br.com.postech.ubsfacil.gateway.ports.estoque.EstoqueRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.insumo.InsumoRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.insumo.InsumoServicePort;
 import br.com.postech.ubsfacil.utils.ConstantUtils;
@@ -20,9 +22,11 @@ import java.util.Map;
 public class InsumoServiceImpl implements InsumoServicePort {
 
     private final InsumoRepositoryPort repositoryPort;
+    private final EstoqueRepositoryPort estoqueRepositoryPort;
 
-    public InsumoServiceImpl(InsumoRepositoryPort repositoryPort) {
+    public InsumoServiceImpl(InsumoRepositoryPort repositoryPort, EstoqueRepositoryPort estoqueRepositoryPort) {
         this.repositoryPort = repositoryPort;
+        this.estoqueRepositoryPort = estoqueRepositoryPort;
     }
 
 
@@ -113,6 +117,7 @@ public class InsumoServiceImpl implements InsumoServicePort {
                     .orElseThrow(() -> new InsumoNotFoundException(ConstantUtils.INSUMO_NAO_ENCONTRADO));
 
             repositoryPort.deletarInsumo(sku);
+            estoqueRepositoryPort.findByInsumoSku(sku).ifPresent(estoque -> estoqueRepositoryPort.deletarEstoque(estoque.getIdEstoque()));
 
         } catch (InsumoNotFoundException e) {
             throw e;
