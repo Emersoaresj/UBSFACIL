@@ -158,10 +158,16 @@ public class UbsServiceImpl implements UbsServicePort {
         if (novosDados.getTelefone() != null) ubs.setTelefone(novosDados.getTelefone());
         if (novosDados.getLogradouro() != null) ubs.setLogradouro(novosDados.getLogradouro());
         if (novosDados.getNumero() != null) ubs.setNumero(novosDados.getNumero());
-        if (novosDados.getCep() != null) ubs.setCep(novosDados.getCep());
         if (novosDados.getBairro() != null) ubs.setBairro(novosDados.getBairro());
         if (novosDados.getCidade() != null) ubs.setCidade(novosDados.getCidade());
         if (novosDados.getUf() != null) ubs.setUf(novosDados.getUf());
+
+        if (novosDados.getCep() != null) {
+            ubs.setCep(novosDados.getCep());
+            Coordenada coordenada = geocodingServicePort.buscarCoordenadasPorCep(novosDados.getCep());
+            ubs.setLatitude(coordenada.getLatitude());
+            ubs.setLongitude(coordenada.getLongitude());
+        }
     }
 
     private ResponseDto montaResponse(Ubs ubs, String acao) {
