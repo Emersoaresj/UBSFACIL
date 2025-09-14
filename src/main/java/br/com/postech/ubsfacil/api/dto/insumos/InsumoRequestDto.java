@@ -7,9 +7,6 @@ import lombok.Data;
 @Data
 public class InsumoRequestDto {
 
-    @NotBlank(message = "O SKU é obrigatório")
-    private String sku;
-
     @NotBlank(message = "O nome do insumo é obrigatório")
     @Size(min = 3, message = "O nome do insumo deve ter ao menos 3 caracteres")
     private String nome;

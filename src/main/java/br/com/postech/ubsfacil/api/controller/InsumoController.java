@@ -65,14 +65,16 @@ public class InsumoController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    @PutMapping("/atualizar")
+    @PutMapping("/atualizar/{sku}")
     @Operation(summary = "Atualizar Insumo",
             description = "Endpoint para atualizar os dados de um insumo existente pelo SKU.")
     public ResponseEntity<InsumoResponseDto> atualizarInsumo(
+            @Parameter(description = "SKU do insumo", example = "DIP500")
+            @PathVariable("sku") String sku,
             @Valid @RequestBody InsumoRequestDto requestDto) {
 
         Insumo insumo = InsumoMapper.INSTANCE.requestToDomain(requestDto);
-
+        insumo.setSku(sku);
         Insumo atualizado = servicePort.atualizarInsumo(insumo);
 
         InsumoResponseDto dto = InsumoMapper.INSTANCE.domainToResponse(atualizado);

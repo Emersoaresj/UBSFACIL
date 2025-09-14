@@ -10,6 +10,7 @@ import br.com.postech.ubsfacil.gateway.ports.estoque.EstoqueRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.insumo.InsumoRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.insumo.InsumoServicePort;
 import br.com.postech.ubsfacil.utils.ConstantUtils;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -110,14 +111,15 @@ public class InsumoServiceImpl implements InsumoServicePort {
         }
     }
 
+    @Transactional
     @Override
     public void deletarInsumo(String sku) {
         try {
             repositoryPort.findBySku(sku)
                     .orElseThrow(() -> new InsumoNotFoundException(ConstantUtils.INSUMO_NAO_ENCONTRADO));
 
-            repositoryPort.deletarInsumo(sku);
             estoqueRepositoryPort.findByInsumoSku(sku).ifPresent(estoque -> estoqueRepositoryPort.deletarEstoque(estoque.getIdEstoque()));
+            repositoryPort.deletarInsumo(sku);
 
         } catch (InsumoNotFoundException e) {
             throw e;
@@ -126,7 +128,6 @@ public class InsumoServiceImpl implements InsumoServicePort {
             throw new ErroInternoException("Erro interno ao tentar excluir insumo: " + e.getMessage());
         }
     }
-
 
     private ResponseDto montaResponse(Insumo insumo, String acao) {
         ResponseDto response = new ResponseDto();
