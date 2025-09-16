@@ -184,4 +184,10 @@ public class Ubs {
         }
     }
 
+    public static void validarCep(String cep) {
+        if (isBlank(cep) || !CEP_PATTERN.matcher(cep).matches()) {
+            throw new ErroNegocioException("CEP deve estar no formato 00000-000.");
+        }
+    }
+
 }

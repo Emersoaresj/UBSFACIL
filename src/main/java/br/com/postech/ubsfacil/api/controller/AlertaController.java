@@ -3,7 +3,7 @@ package br.com.postech.ubsfacil.api.controller;
 import br.com.postech.ubsfacil.api.dto.alertas.AlertasResponseDto;
 import br.com.postech.ubsfacil.api.mapper.AlertaMapper;
 import br.com.postech.ubsfacil.domain.Alerta;
-import br.com.postech.ubsfacil.gateway.ports.AlertaServicePort;
+import br.com.postech.ubsfacil.gateway.ports.alertas.AlertaServicePort;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;

@@ -1,7 +1,6 @@
 package br.com.postech.ubsfacil.service;
 
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
-import br.com.postech.ubsfacil.domain.Estoque;
 import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
@@ -118,7 +117,7 @@ public class InsumoServiceImpl implements InsumoServicePort {
             repositoryPort.findBySku(sku)
                     .orElseThrow(() -> new InsumoNotFoundException(ConstantUtils.INSUMO_NAO_ENCONTRADO));
 
-            estoqueRepositoryPort.findByInsumoSku(sku).ifPresent(estoque -> estoqueRepositoryPort.deletarEstoque(estoque.getIdEstoque()));
+            estoqueRepositoryPort.deletarTodosPorInsumoSku(sku);
             repositoryPort.deletarInsumo(sku);
 
         } catch (InsumoNotFoundException e) {

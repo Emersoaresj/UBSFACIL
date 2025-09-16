@@ -1,6 +1,7 @@
 package br.com.postech.ubsfacil.api.mapper;
 
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoResponseDto;
+import br.com.postech.ubsfacil.api.dto.ubs.UbsEstoqueProjection;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsRequestDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsResponseDto;
 import br.com.postech.ubsfacil.api.dto.ubs.UbsUpdateDto;

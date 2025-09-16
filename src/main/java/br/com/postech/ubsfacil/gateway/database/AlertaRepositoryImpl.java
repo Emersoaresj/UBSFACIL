@@ -6,7 +6,7 @@ import br.com.postech.ubsfacil.domain.Alerta;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.gateway.database.entity.AlertaEntity;
 import br.com.postech.ubsfacil.gateway.database.repository.AlertaRepositoryJpa;
-import br.com.postech.ubsfacil.gateway.ports.AlertaRepositoryPort;
+import br.com.postech.ubsfacil.gateway.ports.alertas.AlertaRepositoryPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,7 @@
 package br.com.postech.ubsfacil.api.mapper;
 
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoRequestDto;
+import br.com.postech.ubsfacil.api.dto.insumos.InsumoUpdateDto;
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoResponseDto;
 import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.gateway.database.entity.InsumoEntity;
@@ -15,9 +16,13 @@ public interface InsumoMapper {
 
     InsumoMapper INSTANCE = Mappers.getMapper(InsumoMapper.class);
 
+
+    @Mapping(target = "idInsumo", ignore = true)
+    Insumo requestToDomain(InsumoRequestDto insumoUpdateDto);
+
     @Mapping(target = "idInsumo", ignore = true)
     @Mapping(target = "sku", ignore = true)
-    Insumo requestToDomain (InsumoRequestDto insumoRequestDto);
+    Insumo updateToDomain(InsumoUpdateDto insumoUpdateDto);
 
     @Mapping(target = "idInsumo", ignore = true)
     InsumoEntity domainToEntity(Insumo insumo);

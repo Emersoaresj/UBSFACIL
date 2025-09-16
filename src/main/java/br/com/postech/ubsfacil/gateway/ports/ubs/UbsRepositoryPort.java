@@ -1,5 +1,6 @@
 package br.com.postech.ubsfacil.gateway.ports.ubs;
 
+import br.com.postech.ubsfacil.api.dto.ubs.UbsEstoqueProjection;
 import br.com.postech.ubsfacil.domain.Ubs;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface UbsRepositoryPort {
     Ubs atualizarUbs(Ubs ubs);
 
     void deletarUbs(String cnes);
+
+    List<UbsEstoqueProjection> buscaUbsComEstoque(String sku);
 }

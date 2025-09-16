@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface EstoqueRepositoryPort {
 
-    Optional<Estoque> findByInsumoSku(String insumoSku);
+    void deletarTodosPorInsumoSku(String insumoSku);
 
     Estoque cadastrarEstoque(Estoque estoque);
 
@@ -20,4 +20,8 @@ public interface EstoqueRepositoryPort {
     Estoque atualizarEstoque(Estoque estoque);
 
     void deletarEstoque(Integer idEstoque);
+
+    List<Estoque> findByUbsCnes(String cnes);
+
+    List<Estoque> buscaPorSku(String sku);
 }

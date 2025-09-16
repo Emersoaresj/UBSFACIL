@@ -63,6 +63,14 @@ public class EstoqueController {
             EstoqueResponseDto filtro = EstoqueMapper.INSTANCE.domainToResponse(responseFiltro);
             return ResponseEntity.status(HttpStatus.OK).body(List.of(filtro));
 
+        } else if (cnes != null) {
+            responseList = servicePort.buscarPorCnes(cnes);
+            return ResponseEntity.ok(EstoqueMapper.INSTANCE.listDomainToResponse(responseList));
+
+        } else if (sku != null) {
+            responseList = servicePort.buscarPorSku(sku);
+            return ResponseEntity.ok(EstoqueMapper.INSTANCE.listDomainToResponse(responseList));
+
         } else {
             responseList = servicePort.buscarTodos();
             List<EstoqueResponseDto> dto = EstoqueMapper.INSTANCE.listDomainToResponse(responseList);

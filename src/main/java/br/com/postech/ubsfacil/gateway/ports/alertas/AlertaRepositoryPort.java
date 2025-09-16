@@ -1,4 +1,4 @@
-package br.com.postech.ubsfacil.gateway.ports;
+package br.com.postech.ubsfacil.gateway.ports.alertas;
 
 import br.com.postech.ubsfacil.api.dto.estoque.TipoAlerta;
 import br.com.postech.ubsfacil.domain.Alerta;

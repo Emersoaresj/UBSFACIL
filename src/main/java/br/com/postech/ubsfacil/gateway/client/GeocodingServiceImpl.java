@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GeocodingServiceImpl implements GeocordingServicePort {
+public class GeocodingServiceImpl implements GeocodingServicePort {
 
     private final NominatimClient nominatimClient;
 

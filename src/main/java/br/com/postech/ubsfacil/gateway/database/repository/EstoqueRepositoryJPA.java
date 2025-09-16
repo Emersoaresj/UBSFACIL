@@ -3,11 +3,15 @@ package br.com.postech.ubsfacil.gateway.database.repository;
 import br.com.postech.ubsfacil.gateway.database.entity.EstoqueEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface EstoqueRepositoryJPA extends JpaRepository<EstoqueEntity, Integer> {
 
-    Optional<EstoqueEntity> findByInsumoSku(String insumoSku);
+    void deleteAllByInsumoSku(String insumoSku);
 
     EstoqueEntity findByUbsCnesAndInsumoSku(String ubsCnes, String insumoSku);
+
+    List<EstoqueEntity> findAllByUbsCnes(String cnes);
+
+    List<EstoqueEntity> findAllByInsumoSku(String insumoSku);
 }

@@ -8,13 +8,12 @@ import br.com.postech.ubsfacil.domain.exceptions.ErroExternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
 import br.com.postech.ubsfacil.domain.exceptions.ubs.UbsNotFoundException;
-import br.com.postech.ubsfacil.gateway.client.GeocordingServicePort;
+import br.com.postech.ubsfacil.gateway.client.GeocodingServicePort;
 import br.com.postech.ubsfacil.gateway.client.dto.Coordenada;
 import br.com.postech.ubsfacil.gateway.ports.ubs.UbsRepositoryPort;
 import br.com.postech.ubsfacil.gateway.ports.ubs.UbsServicePort;
 import br.com.postech.ubsfacil.utils.ConstantUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -28,9 +27,9 @@ public class UbsServiceImpl implements UbsServicePort {
 
 
     private final UbsRepositoryPort ubsRepositoryPort;
-    private final GeocordingServicePort geocodingServicePort;
+    private final GeocodingServicePort geocodingServicePort;
 
-    public UbsServiceImpl(UbsRepositoryPort ubsRepositoryPort, GeocordingServicePort geocodingServicePort) {
+    public UbsServiceImpl(UbsRepositoryPort ubsRepositoryPort, GeocodingServicePort geocodingServicePort) {
         this.ubsRepositoryPort = ubsRepositoryPort;
         this.geocodingServicePort = geocodingServicePort;
     }

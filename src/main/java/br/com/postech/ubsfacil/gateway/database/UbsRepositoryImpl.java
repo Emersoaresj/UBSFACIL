@@ -1,5 +1,6 @@
 package br.com.postech.ubsfacil.gateway.database;
 
+import br.com.postech.ubsfacil.api.dto.ubs.UbsEstoqueProjection;
 import br.com.postech.ubsfacil.api.mapper.UbsMapper;
 import br.com.postech.ubsfacil.domain.Ubs;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
@@ -99,6 +100,16 @@ public class UbsRepositoryImpl implements UbsRepositoryPort {
         } catch (Exception e) {
             log.error("Erro ao deletar UBS", e);
             throw new ErroInternoException("Erro ao deletar UBS: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<UbsEstoqueProjection> buscaUbsComEstoque(String sku) {
+        try {
+            return ubsRepositoryJPA.buscaUbsComEstoque(sku);
+        } catch (Exception e) {
+            log.error("Erro ao buscar lista de UBS por SKU", e);
+            throw new ErroInternoException("Erro ao buscar UBS por SKU: " + e.getMessage());
         }
     }
 

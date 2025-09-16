@@ -83,15 +83,15 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
     }
 
     @Override
-    public Optional<Estoque> findByInsumoSku(String insumoSku) {
+    public void deletarTodosPorInsumoSku(String insumoSku) {
         try {
-            return estoqueRepositoryJPA.findByInsumoSku(insumoSku)
-                    .map(EstoqueMapper.INSTANCE::entityToDomain);
+            estoqueRepositoryJPA.deleteAllByInsumoSku(insumoSku);
         } catch (Exception e) {
-            log.error("Erro ao buscar SKU", e);
-            throw new ErroInternoException("Erro ao buscar SKU: " + e.getMessage());
+            log.error("Erro ao deletar todos os estoques pelo SKU {}", insumoSku, e);
+            throw new ErroInternoException("Erro ao deletar estoques pelo SKU: " + e.getMessage());
         }
     }
+
 
 
     @Transactional
@@ -102,6 +102,28 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
         } catch (Exception e) {
             log.error("Erro ao deletar Estoque", e);
             throw new ErroInternoException("Erro ao deletar Estoque: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Estoque> findByUbsCnes(String cnes) {
+        try {
+            List<EstoqueEntity> entities = estoqueRepositoryJPA.findAllByUbsCnes(cnes);
+            return EstoqueMapper.INSTANCE.listEntityToDomain(entities);
+        } catch (Exception e) {
+            log.error("Erro ao buscar todos os Estoques", e);
+            throw new ErroInternoException("Erro ao buscar todos os Estoques: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Estoque> buscaPorSku(String sku) {
+        try {
+            List<EstoqueEntity> entities = estoqueRepositoryJPA.findAllByInsumoSku(sku);
+            return EstoqueMapper.INSTANCE.listEntityToDomain(entities);
+        } catch (Exception e) {
+            log.error("Erro ao buscar todos os Estoques", e);
+            throw new ErroInternoException("Erro ao buscar todos os Estoques: " + e.getMessage());
         }
     }
 }

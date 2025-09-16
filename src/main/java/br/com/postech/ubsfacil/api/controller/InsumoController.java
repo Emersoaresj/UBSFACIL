@@ -2,6 +2,7 @@ package br.com.postech.ubsfacil.api.controller;
 
 import br.com.postech.ubsfacil.api.dto.ResponseDto;
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoRequestDto;
+import br.com.postech.ubsfacil.api.dto.insumos.InsumoUpdateDto;
 import br.com.postech.ubsfacil.api.dto.insumos.InsumoResponseDto;
 import br.com.postech.ubsfacil.api.mapper.InsumoMapper;
 import br.com.postech.ubsfacil.domain.Insumo;
@@ -71,9 +72,9 @@ public class InsumoController {
     public ResponseEntity<InsumoResponseDto> atualizarInsumo(
             @Parameter(description = "SKU do insumo", example = "DIP500")
             @PathVariable("sku") String sku,
-            @Valid @RequestBody InsumoRequestDto requestDto) {
+            @Valid @RequestBody InsumoUpdateDto requestDto) {
 
-        Insumo insumo = InsumoMapper.INSTANCE.requestToDomain(requestDto);
+        Insumo insumo = InsumoMapper.INSTANCE.updateToDomain(requestDto);
         insumo.setSku(sku);
         Insumo atualizado = servicePort.atualizarInsumo(insumo);
 

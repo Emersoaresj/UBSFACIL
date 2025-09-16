@@ -22,4 +22,8 @@ public interface EstoqueServicePort {
     void deletarEstoque(Integer idEstoque);
 
     MovimentacaoResponseDto registrarMovimentacao(Estoque estoque, String tipoMovimentacao, String motivo);
+
+    List<Estoque> buscarPorCnes(String cnes);
+
+    List<Estoque> buscarPorSku(String sku);
 }

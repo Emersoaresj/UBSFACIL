@@ -5,10 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class InsumoRequestDto {
-
-    @NotBlank(message = "O SKU é obrigatório")
-    private String sku;
+public class InsumoUpdateDto {
 
     @NotBlank(message = "O nome do insumo é obrigatório")
     @Size(min = 3, message = "O nome do insumo deve ter ao menos 3 caracteres")
