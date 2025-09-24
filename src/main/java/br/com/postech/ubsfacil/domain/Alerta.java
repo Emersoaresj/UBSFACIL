@@ -70,10 +70,14 @@ public class Alerta {
     }
 
 
-    public static boolean validarTipoAlerta(TipoAlerta tipoAlerta) {
-        return tipoAlerta == TipoAlerta.ESGOTADO ||
-               tipoAlerta == TipoAlerta.ESTOQUE_BAIXO ||
-               tipoAlerta == TipoAlerta.VENCIDO ||
-               tipoAlerta == TipoAlerta.VENCIMENTO_PROXIMO;
+    public static boolean validarTipoAlerta(String tipoAlerta) {
+        if (tipoAlerta == null) return false;
+
+        try {
+            TipoAlerta.valueOf(tipoAlerta.toUpperCase());
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 }

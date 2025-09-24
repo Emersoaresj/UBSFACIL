@@ -30,21 +30,25 @@ public class AlertaController {
     @GetMapping("/buscar-alertas")
     public ResponseEntity<List<AlertasResponseDto>> buscarAlertas(
             @Parameter(description = "CNES da Unidade Básica de Saúde", example = "1234567")
-            @RequestParam(value = "cnes") String cnes,
+            @RequestParam(value = "cnes", required = false) String cnes,
             @Parameter(description = "Tipo de Alerta", example = "ESTOQUE_BAIXO, ESGOTADO, VENCIDO, VENCIMENTO_PROXIMO")
             @RequestParam(value = "tipoAlerta", required = false) String tipoAlerta) {
 
-        List<Alerta> alertas;
+        List<Alerta> alertas = obterAlertasPorParametros(cnes, tipoAlerta);
+        List<AlertasResponseDto> dto = AlertaMapper.INSTANCE.domainToResponse(alertas);
 
-        if (tipoAlerta != null) {
-            alertas = servicePort.buscarAlertasPorTipo(cnes, tipoAlerta);
-            List<AlertasResponseDto> dto = AlertaMapper.INSTANCE.domainToResponse(alertas);
-            return ResponseEntity.status(HttpStatus.OK).body(dto);
-        } else {
-            alertas = servicePort.buscarTodosAlertasUbs(cnes);
-            List<AlertasResponseDto> dto = AlertaMapper.INSTANCE.domainToResponse(alertas);
-            return ResponseEntity.status(HttpStatus.OK).body(dto);
-        }
+        return ResponseEntity.ok(dto);
     }
 
+    private List<Alerta> obterAlertasPorParametros(String cnes, String tipoAlerta) {
+        if (tipoAlerta == null && (cnes == null || cnes.isEmpty())) {
+            return servicePort.buscarTodosAlertas();
+        } else if (tipoAlerta != null && cnes == null) {
+            return servicePort.buscarAlertasPorTipo(tipoAlerta);
+        } else if (tipoAlerta != null && cnes != null) {
+            return servicePort.buscarAlertasPorTipoAndCnes(cnes, tipoAlerta);
+        } else {
+            return servicePort.buscarTodosAlertasUbs(cnes);
+        }
+}
 }

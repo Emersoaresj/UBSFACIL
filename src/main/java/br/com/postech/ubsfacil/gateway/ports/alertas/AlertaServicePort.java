@@ -11,5 +11,9 @@ public interface AlertaServicePort {
 
     List<Alerta> buscarTodosAlertasUbs(String cnes);
 
-    List<Alerta> buscarAlertasPorTipo(String cnes, String tipoAlerta);
+    List<Alerta> buscarAlertasPorTipoAndCnes(String cnes, String tipoAlerta);
+
+    List<Alerta> buscarTodosAlertas();
+
+    List<Alerta> buscarAlertasPorTipo(String tipoAlerta);
 }

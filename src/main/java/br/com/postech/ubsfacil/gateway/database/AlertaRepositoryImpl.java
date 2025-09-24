@@ -55,4 +55,26 @@ public class AlertaRepositoryImpl implements AlertaRepositoryPort {
             throw new ErroInternoException("Erro ao buscar alertas da UBS por tipo: " + e.getMessage());
         }
     }
+
+    @Override
+    public List<Alerta> findAll() {
+        try {
+            List<AlertaEntity> alertaEntities = alertaRepositoryJpa.findAll();
+            return AlertaMapper.INSTANCE.entityToDomain(alertaEntities);
+        } catch (Exception e) {
+            log.error("Erro ao buscar todos os alertas", e);
+            throw new ErroInternoException("Erro ao buscar todos os alertas: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Alerta> findAllByTipoAlerta(TipoAlerta tipoAlerta) {
+        try {
+            List<AlertaEntity> alertaEntities = alertaRepositoryJpa.findAllByTipoAlerta(tipoAlerta);
+            return AlertaMapper.INSTANCE.entityToDomain(alertaEntities);
+        } catch (Exception e) {
+            log.error("Erro ao buscar alertas por tipo", e);
+            throw new ErroInternoException("Erro ao buscar alertas por tipo: " + e.getMessage());
+        }
+    }
 }

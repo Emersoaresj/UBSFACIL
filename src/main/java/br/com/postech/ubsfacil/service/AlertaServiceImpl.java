@@ -61,21 +61,46 @@ public class AlertaServiceImpl implements AlertaServicePort {
     }
 
     @Override
-    public List<Alerta> buscarAlertasPorTipo(String cnes, String tipoAlerta) {
+    public List<Alerta> buscarAlertasPorTipoAndCnes(String cnes, String tipoAlerta) {
         try {
             Ubs.validarCnes(cnes);
-            TipoAlerta tipoAlertaEnum = TipoAlerta.valueOf(tipoAlerta.toUpperCase());
-            boolean isTipoAlertaOk = Alerta.validarTipoAlerta(tipoAlertaEnum);
+            boolean isTipoAlertaOk = Alerta.validarTipoAlerta(tipoAlerta);
             if (!isTipoAlertaOk) {
                 throw new TipoAlertaException("Tipo de alerta inválido. Valores aceitos: ESTOQUE_BAIXO, ESGOTADO, VENCIDO, VENCIMENTO_PROXIMO");
             } else if (ubsRepositoryPort.findByCnes(cnes).isEmpty()) {
                 throw new UbsNotFoundException(ConstantUtils.UBS_NAO_ENCONTRADA);
             }
+            TipoAlerta tipoAlertaEnum = TipoAlerta.valueOf(tipoAlerta.toUpperCase());
             return alertaRepositoryPort.findAllByUbsCnesAndTipoAlerta(cnes, tipoAlertaEnum);
-        } catch (UbsNotFoundException | ErroNegocioException e) {
+        } catch (TipoAlertaException | UbsNotFoundException | ErroNegocioException e) {
             throw e;
         } catch (Exception e) {
             throw new ErroNegocioException("Erro ao buscar alertas da UBS: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Alerta> buscarTodosAlertas() {
+        try {
+            return alertaRepositoryPort.findAll();
+        } catch (Exception e) {
+            throw new ErroNegocioException("Erro ao buscar todos os alertas: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Alerta> buscarAlertasPorTipo(String tipoAlerta) {
+        try {
+            boolean isTipoAlertaOk = Alerta.validarTipoAlerta(tipoAlerta);
+            if (!isTipoAlertaOk) {
+                throw new TipoAlertaException("Tipo de alerta inválido. Valores aceitos: ESTOQUE_BAIXO, ESGOTADO, VENCIDO, VENCIMENTO_PROXIMO");
+            }
+            TipoAlerta tipoAlertaEnum = TipoAlerta.valueOf(tipoAlerta.toUpperCase());
+            return alertaRepositoryPort.findAllByTipoAlerta(tipoAlertaEnum);
+        } catch (TipoAlertaException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ErroNegocioException("Erro ao buscar alertas por tipo: " + e.getMessage());
         }
     }
 

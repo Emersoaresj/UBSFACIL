@@ -12,4 +12,8 @@ public interface AlertaRepositoryPort {
     List<Alerta> findAllByUbsCnes(String cnes);
 
     List<Alerta> findAllByUbsCnesAndTipoAlerta(String cnes, TipoAlerta tipoAlerta);
+
+    List<Alerta> findAll();
+
+    List<Alerta> findAllByTipoAlerta(TipoAlerta tipoAlerta);
 }

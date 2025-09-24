@@ -13,4 +13,6 @@ public interface AlertaRepositoryJpa extends JpaRepository<AlertaEntity, Integer
     List<AlertaEntity> findAllByUbsCnes(String cnes);
 
     List<AlertaEntity> findAllByUbsCnesAndTipoAlerta(String cnes, TipoAlerta tipoAlerta);
+
+    List<AlertaEntity> findAllByTipoAlerta(TipoAlerta tipoAlerta);
 }
