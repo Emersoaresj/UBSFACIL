@@ -19,8 +19,8 @@ public class MovimentacaoEntity {
     @Column(name = "ubs_cnes")
     private String ubsCnes;
 
-    @Column(name = "insumo_sku")
-    private String insumoSku;
+    @Column(name = "insumo_barcode")
+    private String insumoBarcode;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_movimentacao")

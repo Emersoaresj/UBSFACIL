@@ -48,13 +48,13 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
     }
 
     @Override
-    public Optional<Estoque> findByCnesAndSku(String cnes, String sku) {
+    public Optional<Estoque> findByCnesAndInsumoBarcode(String cnes, String barcode) {
         try {
-            EstoqueEntity entities = estoqueRepositoryJPA.findByUbsCnesAndInsumoSku(cnes, sku);
+            EstoqueEntity entities = estoqueRepositoryJPA.findByUbsCnesAndInsumoBarcode(cnes, barcode);
             return Optional.ofNullable(EstoqueMapper.INSTANCE.entityToDomain(entities));
         } catch (Exception e) {
-            log.error("Erro ao buscar Estoques por CNES e SKU", e);
-            throw new ErroInternoException("Erro ao buscar Estoques por CNES e SKU: " + e.getMessage());
+            log.error("Erro ao buscar Estoques por CNES e Barcode", e);
+            throw new ErroInternoException("Erro ao buscar Estoques por CNES e Barcode: " + e.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
     @Override
     public void deletarTodosPorInsumoSku(String insumoSku) {
         try {
-            estoqueRepositoryJPA.deleteAllByInsumoSku(insumoSku);
+            estoqueRepositoryJPA.deleteAllByInsumoBarcode(insumoSku);
         } catch (Exception e) {
             log.error("Erro ao deletar todos os estoques pelo SKU {}", insumoSku, e);
             throw new ErroInternoException("Erro ao deletar estoques pelo SKU: " + e.getMessage());
@@ -117,9 +117,9 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
     }
 
     @Override
-    public List<Estoque> buscaPorSku(String sku) {
+    public List<Estoque> buscaPorInsumoBarcode(String sku) {
         try {
-            List<EstoqueEntity> entities = estoqueRepositoryJPA.findAllByInsumoSku(sku);
+            List<EstoqueEntity> entities = estoqueRepositoryJPA.findAllByInsumoBarcode(sku);
             return EstoqueMapper.INSTANCE.listEntityToDomain(entities);
         } catch (Exception e) {
             log.error("Erro ao buscar todos os Estoques", e);

@@ -8,9 +8,9 @@ import java.time.LocalDate;
 public class EstoqueResponseDto {
     private Integer idEstoque;
     private String ubsCnes;
-    private String insumoSku;
+    private String insumoBarcode;
     private Integer quantidade;
-    private LocalDate validade;
+    private LocalDate insumoDataValidade;
     private Integer estoqueMinimo;
 
 }

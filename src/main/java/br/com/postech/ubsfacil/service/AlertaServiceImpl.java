@@ -36,7 +36,7 @@ public class AlertaServiceImpl implements AlertaServicePort {
             gerarAlerta(estoque, TipoAlerta.ESTOQUE_BAIXO, "Estoque abaixo do mínimo");
         }
 
-        if (estoque.getValidade() != null) {
+        if (estoque.getInsumoDataValidade() != null) {
             if (estoque.isVencido()) {
                 gerarAlerta(estoque, TipoAlerta.VENCIDO, "Validade vencida");
             } else if (estoque.isVencimentoProximo()) {
@@ -108,7 +108,7 @@ public class AlertaServiceImpl implements AlertaServicePort {
         Alerta alerta = new Alerta(
                 null,
                 estoque.getUbsCnes(),
-                estoque.getInsumoSku(),
+                estoque.getInsumoBarcode(),
                 tipo,
                 detalhe,
                 LocalDate.now()

@@ -48,18 +48,18 @@ public class EstoqueController {
 
     @GetMapping()
     @Operation(summary = "Listar estoques",
-            description = "Endpoint para listar todos os estoques ou filtrar por uma UBS e SKU de insumo.")
+            description = "Endpoint para listar todos os estoques ou filtrar por uma UBS e Barcode de insumo.")
     public ResponseEntity<List<EstoqueResponseDto>> buscarEstoques(
             @Parameter(description = "CNES da Unidade Básica de Saúde", example = "1234567")
             @RequestParam(value = "cnes", required = false) String cnes,
-            @Parameter(description = "SKU do insumo", example = "INS12345")
-            @RequestParam(value = "sku", required = false) String sku){
+            @Parameter(description = "barcode do insumo", example = "123456789012")
+            @RequestParam(value = "barcode", required = false) String barcode){
 
         List<Estoque> responseList;
         Estoque responseFiltro;
 
-        if (cnes != null && sku != null) {
-            responseFiltro = servicePort.buscarPorFiltro(cnes, sku).orElse(null);
+        if (cnes != null && barcode != null) {
+            responseFiltro = servicePort.buscarPorFiltro(cnes, barcode).orElse(null);
             EstoqueResponseDto filtro = EstoqueMapper.INSTANCE.domainToResponse(responseFiltro);
             return ResponseEntity.status(HttpStatus.OK).body(List.of(filtro));
 
@@ -67,8 +67,8 @@ public class EstoqueController {
             responseList = servicePort.buscarPorCnes(cnes);
             return ResponseEntity.ok(EstoqueMapper.INSTANCE.listDomainToResponse(responseList));
 
-        } else if (sku != null) {
-            responseList = servicePort.buscarPorSku(sku);
+        } else if (barcode != null) {
+            responseList = servicePort.buscarPorBarcode(barcode);
             return ResponseEntity.ok(EstoqueMapper.INSTANCE.listDomainToResponse(responseList));
 
         } else {

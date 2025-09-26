@@ -36,9 +36,9 @@ public class InsumoServiceImpl implements InsumoServicePort {
 
             insumo.validarCamposObrigatorios();
 
-            if (repositoryPort.findBySku(insumo.getSku()).isPresent()) {
-                log.error("Insumo com SKU {} já cadastrado", insumo.getSku());
-                throw new ErroNegocioException("Insumo com SKU " + insumo.getSku() + " já cadastrado.");
+            if (repositoryPort.findByBarcode(insumo.getBarcode()).isPresent()) {
+                log.error("Insumo com Barcode {} já cadastrado", insumo.getBarcode());
+                throw new ErroNegocioException("Insumo com Barcode " + insumo.getBarcode() + " já cadastrado.");
             }
 
             insumo.validarRegraPorTipo();
@@ -57,8 +57,8 @@ public class InsumoServiceImpl implements InsumoServicePort {
     @Override
     public Insumo buscarInsumoPorSku(String sku) {
         try {
-            return repositoryPort.findBySku(sku)
-                    .orElseThrow(() -> new InsumoNotFoundException("Insumo com SKU " + sku + " não localizado."));
+            return repositoryPort.findByBarcode(sku)
+                    .orElseThrow(() -> new InsumoNotFoundException("Insumo com Barcode " + sku + " não localizado."));
         } catch (InsumoNotFoundException e) {
             throw e;
         } catch (Exception e) {
@@ -96,8 +96,8 @@ public class InsumoServiceImpl implements InsumoServicePort {
             insumo.validarCamposObrigatorios();
             insumo.validarRegraPorTipo();
 
-            Insumo existente = repositoryPort.findBySku(insumo.getSku())
-                    .orElseThrow(() -> new InsumoNotFoundException("Insumo com SKU " + insumo.getSku() + " não localizado."));
+            Insumo existente = repositoryPort.findByBarcode(insumo.getSku())
+                    .orElseThrow(() -> new InsumoNotFoundException("Insumo com Barcode " + insumo.getSku() + " não localizado."));
 
             insumo.setIdInsumo(existente.getIdInsumo());
 
@@ -114,7 +114,7 @@ public class InsumoServiceImpl implements InsumoServicePort {
     @Override
     public void deletarInsumo(String sku) {
         try {
-            repositoryPort.findBySku(sku)
+            repositoryPort.findByBarcode(sku)
                     .orElseThrow(() -> new InsumoNotFoundException(ConstantUtils.INSUMO_NAO_ENCONTRADO));
 
             estoqueRepositoryPort.deletarTodosPorInsumoSku(sku);

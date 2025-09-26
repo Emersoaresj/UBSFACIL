@@ -23,23 +23,25 @@ public interface UbsRepositoryJPA extends JpaRepository<UbsEntity, Integer> {
     void deleteByCnes(String cnes);
 
     @Query(value = """
-    select
-        a.nome as nomeUbs,
-        a.cnes as cnesUbs,
-        a.telefone as telefoneUbs,
-        a.logradouro as logradouroUbs,
-        a.numero as numeroUbs,
-        a.bairro as bairroUbs,
-        a.cep as cepUbs,
-        a.latitude as latitudeUbs,
-        a.longitude as longitudeUbs,
-        b.quantidade as quantidadeEstoque,
-        b.estoque_minimo as estoqueMinimo,
-        b.insumo_sku as insumoSku
-    from ubs a
-    join estoque b on a.cnes = b.ubs_cnes
-    where b.quantidade > b.estoque_minimo
-      and b.insumo_sku = :sku
-""", nativeQuery = true)
-    List<UbsEstoqueProjection> buscaUbsComEstoque(String sku);
+            select
+                a.nome as nomeUbs,
+                a.cnes as cnesUbs,
+                a.telefone as telefoneUbs,
+                a.logradouro as logradouroUbs,
+                a.numero as numeroUbs,
+                a.bairro as bairroUbs,
+                a.cep as cepUbs,
+                a.latitude as latitudeUbs,
+                a.longitude as longitudeUbs,
+                b.quantidade as quantidadeEstoque,
+                b.estoque_minimo as estoqueMinimo,
+                b.insumo_barcode as barcode,
+                c.nome as nomeInsumo
+            from ubs a
+            join estoque b on a.cnes = b.ubs_cnes
+            join insumo c on b.insumo_barcode = c.barcode
+            where b.quantidade > b.estoque_minimo
+              and c.nome ilike concat('%', :nome, '%');
+            """, nativeQuery = true)
+    List<UbsEstoqueProjection> buscaUbsComEstoque(String nome);
 }

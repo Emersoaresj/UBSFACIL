@@ -7,9 +7,9 @@ import java.time.LocalDate;
 @Data
 public class MovimentacaoRequestDto {
     private String ubsCnes;
-    private String insumoSku;
+    private String insumoBarcode;
     private Integer quantidadeMovimentada;
-    private LocalDate validade;
+    private LocalDate insumoDataValidade;
     private Integer estoqueMinimo;
     private String tipoMovimentacao;
     private String motivo;

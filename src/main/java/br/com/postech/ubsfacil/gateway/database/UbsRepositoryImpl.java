@@ -104,12 +104,12 @@ public class UbsRepositoryImpl implements UbsRepositoryPort {
     }
 
     @Override
-    public List<UbsEstoqueProjection> buscaUbsComEstoque(String sku) {
+    public List<UbsEstoqueProjection> buscaUbsComEstoque(String nome) {
         try {
-            return ubsRepositoryJPA.buscaUbsComEstoque(sku);
+            return ubsRepositoryJPA.buscaUbsComEstoque(nome);
         } catch (Exception e) {
-            log.error("Erro ao buscar lista de UBS por SKU", e);
-            throw new ErroInternoException("Erro ao buscar UBS por SKU: " + e.getMessage());
+            log.error("Erro ao buscar lista de UBS por barcode", e);
+            throw new ErroInternoException("Erro ao buscar UBS por barcode: " + e.getMessage());
         }
     }
 

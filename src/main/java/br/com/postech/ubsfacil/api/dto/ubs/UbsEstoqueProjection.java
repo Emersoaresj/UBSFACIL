@@ -12,5 +12,5 @@ public interface UbsEstoqueProjection {
     Double getLongitudeUbs();
     Integer getQuantidadeEstoque();
     Integer getEstoqueMinimo();
-    String getInsumoSku();
+    String getNomeRemedio();
 }

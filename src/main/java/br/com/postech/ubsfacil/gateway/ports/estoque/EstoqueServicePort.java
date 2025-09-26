@@ -25,5 +25,5 @@ public interface EstoqueServicePort {
 
     List<Estoque> buscarPorCnes(String cnes);
 
-    List<Estoque> buscarPorSku(String sku);
+    List<Estoque> buscarPorBarcode(String sku);
 }

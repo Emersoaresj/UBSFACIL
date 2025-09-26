@@ -9,17 +9,17 @@ public class Movimentacao {
 
     private Integer idMovimentacao;
     private String ubsCnes;
-    private String insumoSku;
+    private String insumoBarcode;
     private TipoMovimentacao tipoMovimentacao;
     private Integer quantidade;
     private String motivo;
     private LocalDate dataMovimentacao;
 
 
-    public Movimentacao(Integer idMovimentacao, String ubsCnes, String insumoSku, TipoMovimentacao tipoMovimentacao, Integer quantidade, String motivo, LocalDate dataMovimentacao) {
+    public Movimentacao(Integer idMovimentacao, String ubsCnes, String insumoBarcode, TipoMovimentacao tipoMovimentacao, Integer quantidade, String motivo, LocalDate dataMovimentacao) {
         this.idMovimentacao = idMovimentacao;
         this.ubsCnes = ubsCnes;
-        this.insumoSku = insumoSku;
+        this.insumoBarcode = insumoBarcode;
         this.tipoMovimentacao = tipoMovimentacao;
         this.quantidade = quantidade;
         this.motivo = motivo;
@@ -31,7 +31,7 @@ public class Movimentacao {
         if (ubsCnes == null || ubsCnes.isBlank()) {
             throw new ErroNegocioException("CNES da UBS é obrigatório.");
         }
-        if (insumoSku == null || insumoSku.isBlank()) {
+        if (insumoBarcode == null || insumoBarcode.isBlank()) {
             throw new ErroNegocioException("SKU do insumo é obrigatório.");
         }
         if (tipoMovimentacao == null) {
@@ -71,12 +71,12 @@ public class Movimentacao {
         this.ubsCnes = ubsCnes;
     }
 
-    public String getInsumoSku() {
-        return insumoSku;
+    public String getInsumoBarcode() {
+        return insumoBarcode;
     }
 
-    public void setInsumoSku(String insumoSku) {
-        this.insumoSku = insumoSku;
+    public void setInsumoBarcode(String insumoBarcode) {
+        this.insumoBarcode = insumoBarcode;
     }
 
     public TipoMovimentacao getTipoMovimentacao() {

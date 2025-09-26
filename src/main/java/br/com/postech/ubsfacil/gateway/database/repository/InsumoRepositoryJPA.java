@@ -10,9 +10,9 @@ import java.util.Optional;
 @Repository
 public interface InsumoRepositoryJPA extends JpaRepository<InsumoEntity, Integer> {
 
-    Optional<InsumoEntity> findBySku(String sku);
+    Optional<InsumoEntity> findByBarcode(String barcode);
 
     List<InsumoEntity> findByTipo(String tipo);
 
-    void deleteBySku(String sku);
+    void deleteByBarcode(String barcode);
 }

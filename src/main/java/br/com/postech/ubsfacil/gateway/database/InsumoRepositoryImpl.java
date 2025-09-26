@@ -37,9 +37,9 @@ public class InsumoRepositoryImpl implements InsumoRepositoryPort {
     }
 
     @Override
-    public Optional<Insumo> findBySku(String sku) {
+    public Optional<Insumo> findByBarcode(String barcode) {
         try {
-            return insumoRepositoryJPA.findBySku(sku)
+            return insumoRepositoryJPA.findByBarcode(barcode)
                     .map(InsumoMapper.INSTANCE::entityToDomain);
         } catch (Exception e) {
             log.error("Erro ao buscar Insumo", e);
@@ -84,9 +84,9 @@ public class InsumoRepositoryImpl implements InsumoRepositoryPort {
 
     @Transactional
     @Override
-    public void deletarInsumo(String sku) {
+    public void deletarInsumo(String barcode) {
         try {
-            insumoRepositoryJPA.deleteBySku(sku);
+            insumoRepositoryJPA.deleteByBarcode(barcode);
         } catch (Exception e) {
             log.error("Erro ao excluir insumo", e);
             throw new ErroInternoException("Erro ao excluir insumo: " + e.getMessage());

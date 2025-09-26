@@ -8,17 +8,17 @@ import java.util.regex.Pattern;
 public class Estoque {
     private Integer idEstoque;
     private String ubsCnes;
-    private String insumoSku;
+    private String insumoBarcode;
+    private LocalDate insumoDataValidade;
     private Integer quantidade;
-    private LocalDate validade;
     private Integer estoqueMinimo;
 
-    public Estoque(Integer idEstoque, String ubsCnes, String insumoSku, Integer quantidade, LocalDate validade, Integer estoqueMinimo) {
+    public Estoque(Integer idEstoque, String ubsCnes, String insumoBarcode, LocalDate insumoDataValidade, Integer quantidade, Integer estoqueMinimo) {
         this.idEstoque = idEstoque;
         this.ubsCnes = ubsCnes;
-        this.insumoSku = insumoSku;
+        this.insumoDataValidade = insumoDataValidade;
+        this.insumoBarcode = insumoBarcode;
         this.quantidade = quantidade;
-        this.validade = validade;
         this.estoqueMinimo = estoqueMinimo;
     }
 
@@ -39,12 +39,20 @@ public class Estoque {
         this.ubsCnes = ubsCnes;
     }
 
-    public String getInsumoSku() {
-        return insumoSku;
+    public LocalDate getInsumoDataValidade() {
+        return insumoDataValidade;
     }
 
-    public void setInsumoSku(String insumoSku) {
-        this.insumoSku = insumoSku;
+    public void setInsumoDataValidade(LocalDate validadeInsumo) {
+        this.insumoDataValidade = validadeInsumo;
+    }
+
+    public String getInsumoBarcode() {
+        return insumoBarcode;
+    }
+
+    public void setInsumoBarcode(String insumoBarcode) {
+        this.insumoBarcode = insumoBarcode;
     }
 
     public Integer getQuantidade() {
@@ -53,14 +61,6 @@ public class Estoque {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
-    }
-
-    public LocalDate getValidade() {
-        return validade;
-    }
-
-    public void setValidade(LocalDate validade) {
-        this.validade = validade;
     }
 
     public Integer getEstoqueMinimo() {
@@ -77,8 +77,8 @@ public class Estoque {
         if (ubsCnes == null) {
             throw new ErroNegocioException("CNES da UBS é obrigatório.");
         }
-        if (insumoSku == null || insumoSku.isBlank()) {
-            throw new ErroNegocioException("SKU do insumo é obrigatório.");
+        if (insumoBarcode == null || insumoBarcode.isBlank()) {
+            throw new ErroNegocioException("Barcode do insumo é obrigatório.");
         }
         if (quantidade < 0) {
             throw new ErroNegocioException("Quantidade não pode ser negativa.");
@@ -94,29 +94,19 @@ public class Estoque {
         }
     }
 
-    public void validarDataValidade() {
-        if (validade == null) {
-            throw new ErroNegocioException("A data de validade é obrigatória.");
-        }
-        if (validade.isBefore(LocalDate.now())) {
-            throw new ErroNegocioException("A data de validade não pode ser anterior a hoje.");
-        }
+    public boolean isVencimentoProximo() {
+        return insumoDataValidade != null && insumoDataValidade.isBefore(LocalDate.now().plusDays(31));
     }
 
+    public boolean isVencido() {
+        return insumoDataValidade != null && insumoDataValidade.isBefore(LocalDate.now());
+    }
     public boolean isEstoqueBaixo() {
         return quantidade < estoqueMinimo;
     }
 
     public boolean isEsgotado() {
         return quantidade == 0;
-    }
-
-    public boolean isVencimentoProximo() {
-        return validade != null && validade.isBefore(LocalDate.now().plusDays(31));
-    }
-
-    public boolean isVencido() {
-        return validade != null && validade.isBefore(LocalDate.now());
     }
 
 }

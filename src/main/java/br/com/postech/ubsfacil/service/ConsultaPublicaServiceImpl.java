@@ -29,12 +29,12 @@ public class ConsultaPublicaServiceImpl implements ConsultaPublicaServicePort {
 
 
     @Override
-    public List<UbsDisponivelResponse> consultaRemedioProximo(String cepPaciente, String sku, Double raioKm) {
+    public List<UbsDisponivelResponse> consultaRemedioProximo(String cepPaciente, String nomeRemedio, Double raioKm) {
         Ubs.validarCep(cepPaciente);
 
         Coordenada pacienteCoord = geocodingServicePort.buscarCoordenadasPorCep(cepPaciente);
 
-        List<UbsEstoqueProjection> ubsComEstoque = ubsRepositoryPort.buscaUbsComEstoque(sku);
+        List<UbsEstoqueProjection> ubsComEstoque = ubsRepositoryPort.buscaUbsComEstoque(nomeRemedio);
 
 
         return ubsComEstoque.stream()

@@ -15,6 +15,7 @@ public interface EstoqueMapper {
     EstoqueMapper INSTANCE = Mappers.getMapper(EstoqueMapper.class);
 
     @Mapping(target = "idEstoque", ignore = true)
+    @Mapping(target = "insumoDataValidade", ignore = true)
     Estoque requestToDomain (EstoqueRequestDto estoqueRequestDto);
 
     Estoque entityToDomain(EstoqueEntity entity);
@@ -29,7 +30,7 @@ public interface EstoqueMapper {
 
     @Mapping(target = "idEstoque", ignore = true)
     @Mapping(target = "ubsCnes", ignore = true)
-    @Mapping(target = "insumoSku", ignore = true)
+    @Mapping(target = "insumoBarcode", ignore = true)
     Estoque requestUpdateToDomain(EstoqueRequestUpdateDto dto);
 
     @Mapping(target = "idEstoque", ignore = true)

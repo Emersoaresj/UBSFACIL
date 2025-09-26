@@ -3,6 +3,8 @@ package br.com.postech.ubsfacil.gateway.database.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @Table
 @Entity(name = "insumo")
@@ -22,6 +24,12 @@ public class InsumoEntity {
     @Column(name = "tipo")
     private String tipo; // Medicamento, material hospitalar, etc.
 
+    @Column(name = "data_validade")
+    private LocalDate dataValidade;
+
     @Column(name = "validade_controlada")
     private boolean validadeControlada;
+
+    @Column(name = "barcode")
+    private String barcode;
 }

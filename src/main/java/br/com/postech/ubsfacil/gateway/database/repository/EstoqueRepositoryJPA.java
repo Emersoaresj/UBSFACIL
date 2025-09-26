@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface EstoqueRepositoryJPA extends JpaRepository<EstoqueEntity, Integer> {
 
-    void deleteAllByInsumoSku(String insumoSku);
+    void deleteAllByInsumoBarcode(String barcode);
 
-    EstoqueEntity findByUbsCnesAndInsumoSku(String ubsCnes, String insumoSku);
+    EstoqueEntity findByUbsCnesAndInsumoBarcode(String ubsCnes, String barcode);
 
     List<EstoqueEntity> findAllByUbsCnes(String cnes);
 
-    List<EstoqueEntity> findAllByInsumoSku(String insumoSku);
+    List<EstoqueEntity> findAllByInsumoBarcode(String barcode);
 }

@@ -3,20 +3,26 @@ package br.com.postech.ubsfacil.domain;
 import br.com.postech.ubsfacil.api.dto.insumos.TipoInsumo;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
 
+import java.time.LocalDate;
+
 public class Insumo {
     private Integer idInsumo;
     private String sku;
     private String nome;
     private TipoInsumo tipo;
     private boolean validadeControlada;
+    private LocalDate dataValidade;
+    private String barcode;
 
 
-    public Insumo(Integer idInsumo, String sku, String nome, TipoInsumo tipo, boolean validadeControlada) {
+    public Insumo(Integer idInsumo, String sku, String nome, TipoInsumo tipo, LocalDate dataValidade, boolean validadeControlada, String barcode) {
         this.idInsumo = idInsumo;
         this.sku = sku;
         this.nome = nome;
         this.tipo = tipo;
+        this.dataValidade = dataValidade;
         this.validadeControlada = validadeControlada;
+        this.barcode = barcode;
     }
 
     public Integer getIdInsumo() {
@@ -55,8 +61,24 @@ public class Insumo {
         this.tipo = tipo;
     }
 
+    public LocalDate getDataValidade() {
+        return dataValidade;
+    }
+
+    public void setDataValidade(LocalDate dataValidade) {
+        this.dataValidade = dataValidade;
+    }
+
     public void setValidadeControlada(boolean validadeControlada) {
         this.validadeControlada = validadeControlada;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     public void validarCamposObrigatorios() {
@@ -65,6 +87,15 @@ public class Insumo {
         }
         if (nome == null || nome.length() < 3) {
             throw new ErroNegocioException("O nome do insumo deve ter ao menos 3 caracteres");
+        }
+    }
+
+    public void validarDataValidade() {
+        if (dataValidade == null) {
+            throw new ErroNegocioException("A data de validade é obrigatória.");
+        }
+        if (dataValidade.isBefore(LocalDate.now())) {
+            throw new ErroNegocioException("A data de validade não pode ser anterior a hoje.");
         }
     }
 

@@ -26,9 +26,9 @@ public class ConsultaPublicaController {
     @GetMapping
     public ResponseEntity<List<UbsDisponivelResponse>> consultaRemedioProximo(
             @RequestParam(value = "cepPaciente") String cepPaciente,
-            @RequestParam(value = "sku") String sku,
+            @RequestParam(value = "nomeRemedio") String nomeRemedio,
             @RequestParam(defaultValue = "5", required = false) Double raioKm) {
-        List<UbsDisponivelResponse> resultado = consultaPublicaServicePort.consultaRemedioProximo(cepPaciente, sku, raioKm);
+        List<UbsDisponivelResponse> resultado = consultaPublicaServicePort.consultaRemedioProximo(cepPaciente, nomeRemedio, raioKm);
         return ResponseEntity.status(HttpStatus.OK).body(resultado);
     }
 }

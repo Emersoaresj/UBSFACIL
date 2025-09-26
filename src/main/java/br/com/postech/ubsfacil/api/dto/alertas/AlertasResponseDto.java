@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 public class AlertasResponseDto {
     private String ubsCnes;
-    private String insumoSku;
+    private String insumoBarcode;
     private TipoAlerta tipoAlerta;
     private String detalhe;
     private LocalDate dataAlerta;

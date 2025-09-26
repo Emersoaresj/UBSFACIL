@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class InsumoRequestDto {
 
@@ -17,5 +19,9 @@ public class InsumoRequestDto {
     @NotBlank(message = "O tipo do insumo é obrigatório")
     private String tipo;
 
+    private LocalDate dataValidade;
+
     private boolean validadeControlada;
+
+    private String barcode;
 }

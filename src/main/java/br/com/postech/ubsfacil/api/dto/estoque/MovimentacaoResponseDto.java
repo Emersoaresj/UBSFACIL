@@ -9,8 +9,8 @@ public class MovimentacaoResponseDto {
 
     private String message;
     private String ubsCnes;
-    private String insumoSku;
+    private String insumoBarcode;
     private Integer quantidadeTotal;
-    private LocalDate validade;
+    private LocalDate insumoDataValidade;
     private TipoMovimentacao tipoMovimentacao;
 }

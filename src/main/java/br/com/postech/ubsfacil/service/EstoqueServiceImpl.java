@@ -5,6 +5,7 @@ import br.com.postech.ubsfacil.api.dto.estoque.MovimentacaoResponseDto;
 import br.com.postech.ubsfacil.api.dto.estoque.TipoMovimentacao;
 import br.com.postech.ubsfacil.api.mapper.EstoqueMapper;
 import br.com.postech.ubsfacil.domain.Estoque;
+import br.com.postech.ubsfacil.domain.Insumo;
 import br.com.postech.ubsfacil.domain.Movimentacao;
 import br.com.postech.ubsfacil.domain.exceptions.ErroInternoException;
 import br.com.postech.ubsfacil.domain.exceptions.ErroNegocioException;
@@ -50,24 +51,23 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
         try {
             Estoque.validarCnes(estoque.getUbsCnes());
             estoque.validarCamposObrigatorios();
-            estoque.validarDataValidade();
 
             if(estoque.isEstoqueBaixo()) {
                 log.warn("Estoque está abaixo do estoque mínimo");
                 throw new ErroNegocioException("A quantidade em estoque não pode ser menor que o estoque mínimo.");
             }
-            if (estoqueRepositoryPort.findByCnesAndSku(estoque.getUbsCnes(), estoque.getInsumoSku()).isPresent()) {
-                log.error("Estoque com SKU de Insumo {} já cadastrado para a UBS {}", estoque.getInsumoSku(), estoque.getUbsCnes());
-                throw new ErroNegocioException("Estoque com SKU " + estoque.getInsumoSku() + " já cadastrado para a UBS " + estoque.getUbsCnes() + ".");
+            if (estoqueRepositoryPort.findByCnesAndInsumoBarcode(estoque.getUbsCnes(), estoque.getInsumoBarcode()).isPresent()) {
+                log.error("Estoque com Insumo já cadastrado para a UBS {}", estoque.getUbsCnes());
+                throw new ErroNegocioException("Estoque já cadastrado para a UBS " + estoque.getUbsCnes() + ".");
             }
             if (ubsRepositoryPort.findByCnes(estoque.getUbsCnes()).isEmpty()){
                 log.error("UBS com CNES {} não encontrada", estoque.getUbsCnes());
                 throw new ErroNegocioException("UBS com CNES " + estoque.getUbsCnes() + " não encontrada.");
             }
-            if(insumoRepositoryPort.findBySku(estoque.getInsumoSku()).isEmpty()){
-                log.error("Insumo com SKU {} não encontrado", estoque.getInsumoSku());
-                throw new ErroNegocioException("Insumo com SKU " + estoque.getInsumoSku() + " não encontrado.");
-            }
+
+            Insumo insumo = insumoRepositoryPort.findByBarcode(estoque.getInsumoBarcode())
+                    .orElseThrow(() -> new ErroNegocioException("Insumo com Barcode " + estoque.getInsumoBarcode() + " não encontrado."));
+            estoque.setInsumoDataValidade(insumo.getDataValidade());
 
             Estoque saved = estoqueRepositoryPort.cadastrarEstoque(estoque);
 
@@ -94,19 +94,19 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
     }
 
     @Override
-    public Optional<Estoque> buscarPorFiltro(String cnes, String sku) {
+    public Optional<Estoque> buscarPorFiltro(String cnes, String barcode) {
         try {
             Estoque.validarCnes(cnes);
             if (ubsRepositoryPort.findByCnes(cnes).isEmpty()){
                 log.error("UBS com CNES {} não encontrada", cnes);
                 throw new ErroNegocioException("Não foi possível localizar uma UBS com o CNES " + cnes + " fornecido.");
             }
-            if (insumoRepositoryPort.findBySku(sku).isEmpty()){
-                log.error("Insumo com SKU {} não encontrado", sku);
-                throw new ErroNegocioException("Não foi possível localizar um Insumo com o SKU " + sku + " fornecido.");
+            if (insumoRepositoryPort.findByBarcode(barcode).isEmpty()){
+                log.error("Insumo com Barcode {} não encontrado", barcode);
+                throw new ErroNegocioException("Não foi possível localizar um Insumo com o Barcode " + barcode + " fornecido.");
             }
 
-            return estoqueRepositoryPort.findByCnesAndSku(cnes, sku);
+            return estoqueRepositoryPort.findByCnesAndInsumoBarcode(cnes, barcode);
         } catch (Exception e) {
             log.error("Erro inesperado ao buscar Estoques por filtro", e);
             throw new ErroInternoException("Erro interno ao tentar buscar Estoques por filtro: " + e.getMessage());
@@ -126,7 +126,6 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
     @Override
     public ResponseDto atualizarEstoque(Integer idEstoque, Estoque estoque) {
         try {
-            estoque.validarDataValidade();
             if(estoque.isEstoqueBaixo()) {
                 log.warn("Estoque com ID {} está abaixo do estoque mínimo", idEstoque);
                 throw new ErroNegocioException("A quantidade em estoque não pode ser menor que o estoque mínimo.");
@@ -137,7 +136,8 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
 
             estoque.setIdEstoque(existente.getIdEstoque());
             estoque.setUbsCnes(existente.getUbsCnes());
-            estoque.setInsumoSku(existente.getInsumoSku());
+            estoque.setInsumoBarcode(existente.getInsumoBarcode());
+            estoque.setInsumoDataValidade(existente.getInsumoDataValidade());
 
             Estoque atualizado = estoqueRepositoryPort.atualizarEstoque(estoque);
             return montaResponse(atualizado, "atualizar");
@@ -168,7 +168,6 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
     public MovimentacaoResponseDto registrarMovimentacao(Estoque estoque, String tipoMovimentacaoStr, String motivo) {
         try {
             estoque.validarCamposObrigatorios();
-            estoque.validarDataValidade();
             Estoque.validarCnes(estoque.getUbsCnes());
 
             Movimentacao.validarTipoMovimentacao(tipoMovimentacaoStr);
@@ -178,11 +177,11 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
             if (ubsRepositoryPort.findByCnes(estoque.getUbsCnes()).isEmpty()) {
                 throw new ErroNegocioException("UBS com CNES " + estoque.getUbsCnes() + " não encontrada.");
             }
-            if (insumoRepositoryPort.findBySku(estoque.getInsumoSku()).isEmpty()) {
-                throw new ErroNegocioException("Insumo com SKU " + estoque.getInsumoSku() + " não encontrado.");
+            if (insumoRepositoryPort.findByBarcode(estoque.getInsumoBarcode()).isEmpty()) {
+                throw new ErroNegocioException("Insumo com Barcode " + estoque.getInsumoBarcode() + " não encontrado.");
             }
 
-            Estoque estoqueAtual = estoqueRepositoryPort.findByCnesAndSku(estoque.getUbsCnes(), estoque.getInsumoSku())
+            Estoque estoqueAtual = estoqueRepositoryPort.findByCnesAndInsumoBarcode(estoque.getUbsCnes(), estoque.getInsumoBarcode())
                     .orElse(null);
 
             boolean isEntrada = tipoMovimentacao == TipoMovimentacao.ENTRADA;
@@ -246,13 +245,13 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
     }
 
     @Override
-    public List<Estoque> buscarPorSku(String sku) {
+    public List<Estoque> buscarPorBarcode(String barcode) {
         try {
-            if (insumoRepositoryPort.findBySku(sku).isEmpty()){
-                log.error("Insumo com SKU {} não encontrado", sku);
-                throw new ErroNegocioException("Não foi possível localizar um Insumo com o SKU " + sku + " fornecido.");
+            if (insumoRepositoryPort.findByBarcode(barcode).isEmpty()){
+                log.error("Insumo não encontrado");
+                throw new ErroNegocioException("Não foi possível localizar um Insumo com o Barcode " + barcode + " fornecido.");
             }
-            return estoqueRepositoryPort.buscaPorSku(sku);
+            return estoqueRepositoryPort.buscaPorInsumoBarcode(barcode);
         } catch (Exception e) {
             log.error("Erro inesperado ao buscar Estoques por filtro", e);
             throw new ErroInternoException("Erro interno ao tentar buscar Estoques por filtro: " + e.getMessage());
@@ -263,7 +262,7 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
         Movimentacao movimentacao = new Movimentacao(
                 null,
                 estoque.getUbsCnes(),
-                estoque.getInsumoSku(),
+                estoque.getInsumoBarcode(),
                 tipoMovimentacao,
                 estoque.getQuantidade(),
                 motivo != null ? motivo : "Movimentação automática",
@@ -280,7 +279,7 @@ public class EstoqueServiceImpl implements EstoqueServicePort {
 
         Map<String, Object> data = new HashMap<>();
         data.put("ubsCnes", estoque.getUbsCnes());
-        data.put("skuInsumo", estoque.getInsumoSku());
+        data.put("BarcodeInsumo", estoque.getInsumoBarcode());
         data.put("quantidade", estoque.getQuantidade());
         data.put("estoqueMinimo", estoque.getEstoqueMinimo());
 

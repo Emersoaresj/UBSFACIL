@@ -6,7 +6,6 @@ import br.com.postech.ubsfacil.domain.Alerta;
 import br.com.postech.ubsfacil.gateway.ports.alertas.AlertaServicePort;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

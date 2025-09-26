@@ -7,15 +7,15 @@ import java.time.LocalDate;
 public class Alerta {
     private Integer idAlerta;
     private String ubsCnes;
-    private String insumoSku;
+    private String insumoBarcode;
     private TipoAlerta tipoAlerta;
     private String detalhe;
     private LocalDate dataAlerta;
 
-    public Alerta(Integer idAlerta, String ubsCnes, String insumoSku, TipoAlerta tipoAlerta, String detalhe, LocalDate dataAlerta) {
+    public Alerta(Integer idAlerta, String ubsCnes, String insumoBarcode, TipoAlerta tipoAlerta, String detalhe, LocalDate dataAlerta) {
         this.idAlerta = idAlerta;
         this.ubsCnes = ubsCnes;
-        this.insumoSku = insumoSku;
+        this.insumoBarcode = insumoBarcode;
         this.tipoAlerta = tipoAlerta;
         this.detalhe = detalhe;
         this.dataAlerta = dataAlerta;
@@ -37,12 +37,12 @@ public class Alerta {
         this.ubsCnes = ubsCnes;
     }
 
-    public String getInsumoSku() {
-        return insumoSku;
+    public String getInsumoBarcode() {
+        return insumoBarcode;
     }
 
-    public void setInsumoSku(String insumoSku) {
-        this.insumoSku = insumoSku;
+    public void setInsumoBarcode(String insumoBarcode) {
+        this.insumoBarcode = insumoBarcode;
     }
 
     public TipoAlerta getTipoAlerta() {

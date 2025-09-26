@@ -22,6 +22,8 @@ public interface InsumoMapper {
 
     @Mapping(target = "idInsumo", ignore = true)
     @Mapping(target = "sku", ignore = true)
+    @Mapping(target = "barcode", ignore = true)
+    @Mapping(target = "dataValidade", ignore = true)
     Insumo updateToDomain(InsumoUpdateDto insumoUpdateDto);
 
     @Mapping(target = "idInsumo", ignore = true)

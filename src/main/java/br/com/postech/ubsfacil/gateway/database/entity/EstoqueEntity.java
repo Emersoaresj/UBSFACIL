@@ -17,14 +17,14 @@ public class EstoqueEntity {
     @Column(name = "ubs_cnes")
     private String ubsCnes;
 
-    @Column(name = "insumo_sku")
-    private String insumoSku;
+    @Column(name = "insumo_barcode")
+    private String insumoBarcode;
 
     @Column(name = "quantidade")
     private Integer quantidade;
 
-    @Column(name = "validade")
-    private LocalDate validade;
+    @Column(name = "insumoDataValidade")
+    private LocalDate insumoDataValidade;
 
     @Column(name = "estoque_minimo")
     private Integer estoqueMinimo;
