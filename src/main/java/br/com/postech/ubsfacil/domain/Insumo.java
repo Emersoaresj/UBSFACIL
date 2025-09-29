@@ -82,8 +82,8 @@ public class Insumo {
     }
 
     public void validarCamposObrigatorios() {
-        if (sku == null || sku.isBlank()) {
-            throw new ErroNegocioException("SKU do insumo é obrigatório");
+        if (barcode == null || barcode.isBlank()) {
+            throw new ErroNegocioException("barcode do insumo é obrigatório");
         }
         if (nome == null || nome.length() < 3) {
             throw new ErroNegocioException("O nome do insumo deve ter ao menos 3 caracteres");

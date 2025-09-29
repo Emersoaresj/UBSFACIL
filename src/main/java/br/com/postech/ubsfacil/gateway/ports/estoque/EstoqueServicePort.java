@@ -13,7 +13,7 @@ public interface EstoqueServicePort {
 
     Estoque buscarEstoquePorId(Integer idEstoque);
 
-    Optional<Estoque> buscarPorFiltro(String cnes, String sku);
+    Optional<Estoque> buscarPorFiltro(String cnes, String barcode);
 
     List<Estoque> buscarTodos();
 
@@ -25,5 +25,5 @@ public interface EstoqueServicePort {
 
     List<Estoque> buscarPorCnes(String cnes);
 
-    List<Estoque> buscarPorBarcode(String sku);
+    List<Estoque> buscarPorBarcode(String barcode);
 }

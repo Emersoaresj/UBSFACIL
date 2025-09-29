@@ -83,12 +83,12 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
     }
 
     @Override
-    public void deletarTodosPorInsumoSku(String insumoSku) {
+    public void deletarTodosPorBarcode(String barcode) {
         try {
-            estoqueRepositoryJPA.deleteAllByInsumoBarcode(insumoSku);
+            estoqueRepositoryJPA.deleteAllByInsumoBarcode(barcode);
         } catch (Exception e) {
-            log.error("Erro ao deletar todos os estoques pelo SKU {}", insumoSku, e);
-            throw new ErroInternoException("Erro ao deletar estoques pelo SKU: " + e.getMessage());
+            log.error("Erro ao deletar todos os estoques pelo barcode {}", barcode, e);
+            throw new ErroInternoException("Erro ao deletar estoques pelo barcode: " + e.getMessage());
         }
     }
 
@@ -117,9 +117,9 @@ public class EstoqueRepositoryImpl implements EstoqueRepositoryPort {
     }
 
     @Override
-    public List<Estoque> buscaPorInsumoBarcode(String sku) {
+    public List<Estoque> buscaPorInsumoBarcode(String barcode) {
         try {
-            List<EstoqueEntity> entities = estoqueRepositoryJPA.findAllByInsumoBarcode(sku);
+            List<EstoqueEntity> entities = estoqueRepositoryJPA.findAllByInsumoBarcode(barcode);
             return EstoqueMapper.INSTANCE.listEntityToDomain(entities);
         } catch (Exception e) {
             log.error("Erro ao buscar todos os Estoques", e);

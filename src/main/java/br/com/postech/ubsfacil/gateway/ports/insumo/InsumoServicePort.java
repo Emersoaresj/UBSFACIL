@@ -9,7 +9,7 @@ public interface InsumoServicePort {
 
     ResponseDto cadastrarInsumo(Insumo insumo);
 
-    Insumo buscarInsumoPorSku(String sku);
+    Insumo buscarInsumoPorBarcode (String barcode);
 
     List<Insumo> buscarPorTipo(String tipo);
 
@@ -17,5 +17,5 @@ public interface InsumoServicePort {
 
     Insumo atualizarInsumo(Insumo insumo);
 
-    void deletarInsumo(String sku);
+    void deletarInsumo(String barcode);
 }

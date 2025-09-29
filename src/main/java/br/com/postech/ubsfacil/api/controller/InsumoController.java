@@ -37,12 +37,12 @@ public class InsumoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cadastro);
     }
 
-    @GetMapping("/sku/{sku}")
-    @Operation(summary = "Buscar Insumo por SKU", description = "Endpoint para buscar insumo pelo SKU fornecido.")
-    public ResponseEntity<InsumoResponseDto> buscarInsumoPorSku(
-            @Parameter(description = "SKU do insumo", example = "DIP500")
-            @PathVariable("sku") String sku) {
-        Insumo response = servicePort.buscarInsumoPorSku(sku);
+    @GetMapping("/barcode/{barcode}")
+    @Operation(summary = "Buscar Insumo por barcode", description = "Endpoint para buscar insumo pelo barcode fornecido.")
+    public ResponseEntity<InsumoResponseDto> buscarInsumoPorBarcode(
+            @Parameter(description = "barcode do insumo", example = "123456789012")
+            @PathVariable("barcode") String barcode) {
+        Insumo response = servicePort.buscarInsumoPorBarcode(barcode);
         InsumoResponseDto dto = InsumoMapper.INSTANCE.domainToResponse(response);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
@@ -66,16 +66,16 @@ public class InsumoController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    @PutMapping("/atualizar/{sku}")
+    @PutMapping("/atualizar/{barcode}")
     @Operation(summary = "Atualizar Insumo",
-            description = "Endpoint para atualizar os dados de um insumo existente pelo SKU.")
+            description = "Endpoint para atualizar os dados de um insumo existente pelo barcode.")
     public ResponseEntity<InsumoResponseDto> atualizarInsumo(
-            @Parameter(description = "SKU do insumo", example = "DIP500")
-            @PathVariable("sku") String sku,
+            @Parameter(description = "barcode do insumo", example = "123456789012")
+            @PathVariable("barcode") String barcode,
             @Valid @RequestBody InsumoUpdateDto requestDto) {
 
         Insumo insumo = InsumoMapper.INSTANCE.updateToDomain(requestDto);
-        insumo.setSku(sku);
+        insumo.setBarcode(barcode);
         Insumo atualizado = servicePort.atualizarInsumo(insumo);
 
         InsumoResponseDto dto = InsumoMapper.INSTANCE.domainToResponse(atualizado);
@@ -83,14 +83,14 @@ public class InsumoController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    @DeleteMapping("/deletar/{sku}")
+    @DeleteMapping("/deletar/{barcode}")
     @Operation(summary = "Excluir insumo",
-            description = "Endpoint para excluir (inativar) um insumo pelo SKU.")
+            description = "Endpoint para excluir (inativar) um insumo pelo barcode.")
     public ResponseEntity<Void> deletarInsumo(
-            @Parameter(description = "SKU do insumo", example = "DIP500")
-            @PathVariable("sku") String sku) {
+            @Parameter(description = "barcode do insumo", example = "123456789012")
+            @PathVariable("barcode") String barcode) {
 
-        servicePort.deletarInsumo(sku);
+        servicePort.deletarInsumo(barcode);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

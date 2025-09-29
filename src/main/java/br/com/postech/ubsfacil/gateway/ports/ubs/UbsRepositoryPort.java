@@ -22,5 +22,5 @@ public interface UbsRepositoryPort {
 
     void deletarUbs(String cnes);
 
-    List<UbsEstoqueProjection> buscaUbsComEstoque(String sku);
+    List<UbsEstoqueProjection> buscaUbsComEstoque(String nomeRemedio);
 }

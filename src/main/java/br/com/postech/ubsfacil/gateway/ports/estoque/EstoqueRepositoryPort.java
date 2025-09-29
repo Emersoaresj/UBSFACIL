@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface EstoqueRepositoryPort {
 
-    void deletarTodosPorInsumoSku(String insumoSku);
+    void deletarTodosPorBarcode (String barcode);
 
     Estoque cadastrarEstoque(Estoque estoque);
 
@@ -23,5 +23,5 @@ public interface EstoqueRepositoryPort {
 
     List<Estoque> findByUbsCnes(String cnes);
 
-    List<Estoque> buscaPorInsumoBarcode(String sku);
+    List<Estoque> buscaPorInsumoBarcode(String barcode);
 }

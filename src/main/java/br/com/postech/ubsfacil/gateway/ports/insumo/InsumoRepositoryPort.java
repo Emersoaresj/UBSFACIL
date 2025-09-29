@@ -9,7 +9,7 @@ public interface InsumoRepositoryPort {
 
     Insumo cadastrarInsumo(Insumo insumo);
 
-    Optional<Insumo> findByBarcode(String sku);
+    Optional<Insumo> findByBarcode(String barcode);
 
     List<Insumo> findByTipo(String tipo);
 

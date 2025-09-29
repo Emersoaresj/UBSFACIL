@@ -55,10 +55,10 @@ public class InsumoServiceImpl implements InsumoServicePort {
     }
 
     @Override
-    public Insumo buscarInsumoPorSku(String sku) {
+    public Insumo buscarInsumoPorBarcode(String barcode) {
         try {
-            return repositoryPort.findByBarcode(sku)
-                    .orElseThrow(() -> new InsumoNotFoundException("Insumo com Barcode " + sku + " não localizado."));
+            return repositoryPort.findByBarcode(barcode)
+                    .orElseThrow(() -> new InsumoNotFoundException("Insumo com Barcode " + barcode + " não localizado."));
         } catch (InsumoNotFoundException e) {
             throw e;
         } catch (Exception e) {
@@ -96,8 +96,8 @@ public class InsumoServiceImpl implements InsumoServicePort {
             insumo.validarCamposObrigatorios();
             insumo.validarRegraPorTipo();
 
-            Insumo existente = repositoryPort.findByBarcode(insumo.getSku())
-                    .orElseThrow(() -> new InsumoNotFoundException("Insumo com Barcode " + insumo.getSku() + " não localizado."));
+            Insumo existente = repositoryPort.findByBarcode(insumo.getBarcode())
+                    .orElseThrow(() -> new InsumoNotFoundException("Insumo com Barcode " + insumo.getBarcode() + " não localizado."));
 
             insumo.setIdInsumo(existente.getIdInsumo());
 
@@ -112,13 +112,13 @@ public class InsumoServiceImpl implements InsumoServicePort {
 
     @Transactional
     @Override
-    public void deletarInsumo(String sku) {
+    public void deletarInsumo(String barcode) {
         try {
-            repositoryPort.findByBarcode(sku)
+            repositoryPort.findByBarcode(barcode)
                     .orElseThrow(() -> new InsumoNotFoundException(ConstantUtils.INSUMO_NAO_ENCONTRADO));
 
-            estoqueRepositoryPort.deletarTodosPorInsumoSku(sku);
-            repositoryPort.deletarInsumo(sku);
+            estoqueRepositoryPort.deletarTodosPorBarcode(barcode);
+            repositoryPort.deletarInsumo(barcode);
 
         } catch (InsumoNotFoundException e) {
             throw e;
