@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
-@Table
-@Entity(name = "ubs")
+@Entity
+@Table(name = "ubs")
 public class UbsEntity {
 
     @Id

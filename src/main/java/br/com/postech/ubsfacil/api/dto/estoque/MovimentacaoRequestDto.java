@@ -9,7 +9,6 @@ public class MovimentacaoRequestDto {
     private String ubsCnes;
     private String insumoBarcode;
     private Integer quantidadeMovimentada;
-    private LocalDate insumoDataValidade;
     private Integer estoqueMinimo;
     private String tipoMovimentacao;
     private String motivo;
